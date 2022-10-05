@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/clRegistro"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Registro">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="150dp"
+        android:fontFamily="@font/omnesmedium"
+        android:text="@string/tvRegistro"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@color/purple_700"
+        app:layout_constraintBottom_toTopOf="@+id/edtNombreRegistro"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <EditText
+        android:id="@+id/edtNombreRegistro"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:autofillHints="AUTOFILL_HINT_NAME"
+        android:ems="10"
+        android:fontFamily="@font/omnesmedium"
+        android:hint="@string/edtNombreRegistro"
+        android:inputType="textPersonName"
+        android:minHeight="48dp"
+        android:textColor="@color/purple_500"
+        app:layout_constraintBottom_toTopOf="@+id/edtEmailRegistro"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <EditText
+        android:id="@+id/edtFolioRegistro"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:autofillHints="no"
+        android:ems="10"
+        android:fontFamily="@font/omnesmedium"
+        android:hint="@string/edtFolioRegistro"
+        android:inputType="textPersonName"
+        android:minHeight="48dp"
+        android:textColor="@color/purple_500"
+        app:layout_constraintBottom_toTopOf="@+id/edtTelefonoRegistro"
+        app:layout_constraintEnd_toEndOf="@+id/edtPasswordRegistro"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/edtPasswordRegistro"
+        app:layout_constraintTop_toBottomOf="@+id/edtPasswordRegistro" />
+
+    <EditText
+        android:id="@+id/edtTelefonoRegistro"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:autofillHints="AUTOFILL_HINT_PHONE"
+        android:ems="10"
+        android:fontFamily="@font/omnesmedium"
+        android:hint="@string/edtTelefonoRegistro"
+        android:inputType="phone"
+        android:minHeight="48dp"
+        android:textColor="@color/purple_500"
+        app:layout_constraintBottom_toTopOf="@+id/btnRegistroRegistro"
+        app:layout_constraintEnd_toEndOf="@+id/edtFolioRegistro"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/edtFolioRegistro"
+        app:layout_constraintTop_toBottomOf="@+id/edtFolioRegistro" />
+
+    <EditText
+        android:id="@+id/edtPasswordRegistro"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:autofillHints="AUTOFILL_HINT_PASSWORD"
+        android:ems="10"
+        android:fontFamily="@font/omnesmedium"
+        android:hint="@string/edtPasswordRegistro"
+        android:inputType="textPassword"
+        android:minHeight="48dp"
+        android:textColor="@color/purple_500"
+        app:layout_constraintBottom_toTopOf="@+id/edtFolioRegistro"
+        app:layout_constraintEnd_toEndOf="@+id/edtEmailRegistro"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/edtEmailRegistro"
+        app:layout_constraintTop_toBottomOf="@+id/edtEmailRegistro" />
+
+    <EditText
+        android:id="@+id/edtEmailRegistro"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:autofillHints="AUTOFILL_HINT_EMAIL_ADDRESS"
+        android:ems="10"
+        android:fontFamily="@font/omnesmedium"
+        android:hint="@string/edtCorreoRegistro"
+        android:inputType="textEmailAddress"
+        android:minHeight="48dp"
+        android:textColor="@color/purple_500"
+        app:layout_constraintBottom_toTopOf="@+id/edtPasswordRegistro"
+        app:layout_constraintEnd_toEndOf="@+id/edtNombreRegistro"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/edtNombreRegistro"
+        app:layout_constraintTop_toBottomOf="@+id/edtNombreRegistro" />
+
+    <Button
+        android:id="@+id/btnRegistroRegistro"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="120dp"
+        android:backgroundTint="@color/purple_500"
+        android:fontFamily="@font/omnessemibold"
+        android:text="@string/btnRegistroRegistro"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnBackRegistro"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/edtTelefonoRegistro"
+        app:layout_constraintTop_toBottomOf="@+id/edtTelefonoRegistro" />
+
+    <Button
+        android:id="@+id/btnBackRegistro"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="10dp"
+        android:backgroundTint="@color/purple_500"
+        android:drawableStart="@android:drawable/ic_menu_revert"
+        android:fontFamily="@font/omnessemibold"
+        android:text="@string/btnCancelarRegistro"
+        app:layout_constraintBottom_toBottomOf="@+id/btnRegistroRegistro"
+        app:layout_constraintEnd_toEndOf="@+id/edtTelefonoRegistro"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btnRegistroRegistro"
+        app:layout_constraintTop_toTopOf="@+id/btnRegistroRegistro" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

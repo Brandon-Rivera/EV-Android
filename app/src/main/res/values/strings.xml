@@ -1,0 +1,46 @@
+<resources>
+    <string name="app_name">BAMX Morelos</string>
+
+    //Login
+    <string name="edtNombreLogin">Nombre</string>
+    <string name="edtPasswordLogin">Contraseña</string>
+    <string name="btnLoginLogin">Iniciar Sesión</string>
+    <string name="btnRegistroLogin">Regístrate</string>
+    <string name="tvEntrarLogin">Bienvenido/ a</string>
+    <string name="tvRegistroLogin">¿Aún no tienes cuenta?</string>
+
+    //Registro
+    <string name="edtNombreRegistro">Nombre</string>
+    <string name="edtFolioRegistro">Folio</string>
+    <string name="edtPasswordRegistro">Contraseña</string>
+    <string name="edtTelefonoRegistro">Teléfono</string>
+    <string name="btnRegistroRegistro">Crear Cuenta</string>
+    <string name="tvRegistro">Registro</string>
+    <string name="btnCancelarRegistro">Cancelar</string>
+    <string name="edtCorreoRegistro">Correo</string>
+
+    //Password
+    <string name="btnCambioPassword">Olvidé mi contraseña</string>
+    <string name="btnCambiarPassword">Cambiar</string>
+    <string name="btnCancelarPassword">Cancelar</string>
+    <string name="edtNuevaPassword">Nueva Contraseña</string>
+    <string name="edtConfirmarPassword">Confirmar Contraseña</string>
+    <string name="tvActualizarPassword">Cambiar Contraseña</string>
+    //Landing
+    <string name="btnEncuestaLanding">Encuesta</string>
+    <string name="btnFamiliaLanding">Mi Familia</string>
+
+    //Main
+    <string name="btnStartMain">Toca para comenzar</string>
+
+    //Familia
+    <string name="tvTitleFamilia">Mi Familia</string>
+    <string name="fbtnDescriptionFamilia">Agregar miembro</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    //Contacto
+    <string name="tvTitleContacto">Contacto</string>
+    <string name="tvMensajeContacto">¡Estamos aquí para apoyarte!</string>
+
+</resources>
