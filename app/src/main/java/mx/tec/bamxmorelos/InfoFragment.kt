@@ -15,16 +15,6 @@ class InfoFragment : Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         val view = layoutInflater.inflate(R.layout.fragment_info, container, false)
-
-        val cb = view.findViewById<Button>(R.id.btnContactoInfo)
-
-        cb.setOnClickListener {
-            val contactFragment = ContactoFragment()
-            val transaction: FragmentTransaction = requireFragmentManager().beginTransaction()
-            transaction.replace(R.id.landingLayout, contactFragment)
-            transaction.commit()
-
-        }
         return view
     }
 
