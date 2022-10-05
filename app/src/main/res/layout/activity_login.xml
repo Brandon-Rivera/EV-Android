@@ -16,7 +16,6 @@
         android:backgroundTint="#00FFFFFF"
         android:fontFamily="@font/omnesmedium"
         android:text="@string/btnRegistroLogin"
-        android:textColor="@color/purple_500"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -25,10 +24,8 @@
 
     <Button
         android:id="@+id/btnLogin"
-        style="@style/estiloTurner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/purple_500"
         android:fontFamily="@font/omnessemibold"
         android:text="@string/btnLoginLogin"
         android:textColor="@color/white"
@@ -50,7 +47,6 @@
         android:importantForAutofill="no"
         android:inputType="textPersonName"
         android:minHeight="48dp"
-        android:textColor="@color/purple_500"
         app:layout_constraintBottom_toTopOf="@+id/edtPassword"
         app:layout_constraintEnd_toEndOf="@+id/edtPassword"
         app:layout_constraintStart_toStartOf="@+id/edtPassword" />
@@ -67,7 +63,6 @@
         android:importantForAutofill="no"
         android:inputType="textPassword"
         android:minHeight="48dp"
-        android:textColor="@color/purple_500"
         app:layout_constraintBottom_toTopOf="@+id/btnLogin"
         app:layout_constraintEnd_toEndOf="@+id/btnLogin"
         app:layout_constraintStart_toStartOf="@+id/btnLogin" />
