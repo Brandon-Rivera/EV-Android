@@ -1,20 +1,30 @@
 package mx.tec.bamxmorelos
 
+import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.icu.text.IDNA.Info
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import androidx.fragment.app.Fragment
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class LandingPage : AppCompatActivity() {
+class LandingPage : AppCompatActivity(), LocationListener {
 
+    lateinit var locationManager: LocationManager
+    lateinit var mapa: GoogleMap
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_landing_page)
         supportActionBar?.hide()
+
+        locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
         val landingFragment = LandingFragment()
         val infoFragment = InfoFragment()
@@ -41,6 +51,10 @@ class LandingPage : AppCompatActivity() {
             transaction.addToBackStack(null)
             transaction.commit()
         }
+    }
+
+    override fun onLocationChanged(location: Location) {
+        TODO("Not yet implemented")
     }
 
 }
