@@ -31,8 +31,11 @@ class LandingPage : AppCompatActivity(), LocationListener {
         val familyFragment = FamilyFragment()
         replaceFragment(landingFragment)
 
+
+
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         bottomNav.selectedItemId = R.id.miHome
+
 
         bottomNav.setOnItemSelectedListener{
             when(it.itemId){
@@ -42,6 +45,8 @@ class LandingPage : AppCompatActivity(), LocationListener {
             }
             true
         }
+
+
 
     }
     private fun replaceFragment(fragment: Fragment){

@@ -1,5 +1,6 @@
 package mx.tec.bamxmorelos
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -17,13 +18,13 @@ class FamilyFragment : Fragment(R.layout.fragment_family){
         savedInstanceState: Bundle?
     ): View? {
         val view = layoutInflater.inflate(R.layout.fragment_family, container, false)
-        val cb = view.findViewById<FloatingActionButton>(R.id.floatingActionButton2)
+        val fab = view.findViewById<FloatingActionButton>(R.id.fabAgregarFamilia)
+        fab.setOnClickListener {
 
-        cb.setOnClickListener {
-            val miembroFragment = MiembroFragment()
-            val transaction: FragmentTransaction = requireFragmentManager().beginTransaction()
-            transaction.replace(R.id.landingLayout, miembroFragment)
-            transaction.commit()
+            val intent = Intent(context, Agregar::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or
+                    Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
         }
             return view
     }

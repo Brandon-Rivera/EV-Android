@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         val clMain = findViewById<ConstraintLayout>(R.id.clMain)
 
-        val sharedPreference = getSharedPreferences("archivo", Context.MODE_PRIVATE)
+        val sharedPreference = getSharedPreferences("profile", Context.MODE_PRIVATE)
 
         with(sharedPreference){
             val nombre = getString("nombre" ,"#" )

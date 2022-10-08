@@ -38,20 +38,26 @@
     <string name="tvTitleFamilia">Mi Familia</string>
     <string name="fbtnDescriptionFamilia">Agregar miembro</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="titleFamilia">Mi Familia</string>
 
     <!--//Contacto -->
     <string name="tvTitleContacto">Contacto</string>
     <string name="tvMensajeContacto">¡Estamos aquí para apoyarte!</string>
 
-    <!--//Miembro -->
-    <string name="edtNombreMiembro">Nombre</string>
-    <string name="edtEdadMiembro">Edad</string>
+    <!--//Agregar -->
+    <string name="edtNombreMiembro">Nombre(s)</string>
+    <string name="edtApellidoMaterno">Apellido Materno</string>
+    <string name="edtApellidoPaterno">Apellido Paterno</string>
     <string name="edtPesoMiembro">Peso</string>
     <string name="edtAlturaMiembro">Altura</string>
-    <string name="edtOcupacionMiembro">Ocupación</string>
+    <string name="edtDate">dd/mm/yyyy</string>
     <string name="tvTitleMiembro">Agregar Miembro</string>
     <string name="btnAgregarMiembro">Agregar</string>
+    <string name="cbLeader">Lider de familia</string>
+    <string name="cbPregnant">Estoy embarazada</string>
 
+
+    <!-- //General -->
+    <string name="logoBAMX">Logo BAMX</string>
 
 </resources>
