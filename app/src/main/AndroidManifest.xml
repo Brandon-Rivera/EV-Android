@@ -17,13 +17,15 @@
         android:theme="@style/Theme.BAMXMorelos"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
         <activity
-<<<<<<< HEAD
-            android:name=".LocationTest"
-=======
-            android:name=".Agregar"
->>>>>>> 79f63fc (Added working Agregar Activity)
-            android:exported="false">
+            android:name=".LocationTest">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".Agregar">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

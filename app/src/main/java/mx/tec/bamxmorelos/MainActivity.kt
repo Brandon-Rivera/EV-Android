@@ -38,8 +38,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         requestPermission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        if(ActivityCompat.checkSelfPermission(this@MainActivity,
-                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) //Si el permiso se concedió, se activa el GPS
+        if(ActivityCompat.checkSelfPermission(this@MainActivity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) //Si el permiso se concedió, se activa el GPS
 
         /*override fun onLocationChanged(location: Location) {
             //Toast.makeText(this@MainActivity, location.latitude.toString(), Toast.LENGTH_SHORT).show()

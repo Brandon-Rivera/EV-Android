@@ -60,4 +60,7 @@
     <!-- //General -->
     <string name="logoBAMX">Logo BAMX</string>
 
+    <!-- //Recycler -->
+    <string name="txtNombre">Persona</string>
+
 </resources>
