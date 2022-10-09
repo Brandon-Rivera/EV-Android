@@ -37,7 +37,6 @@
     <!--//Familia -->
     <string name="tvTitleFamilia">Mi Familia</string>
     <string name="fbtnDescriptionFamilia">Agregar miembro</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="titleFamilia">Mi Familia</string>
 
     <!--//Contacto -->
@@ -62,5 +61,10 @@
 
     <!-- //Recycler -->
     <string name="txtNombre">Persona</string>
+    <string name="txtEdad">Edad</string>
+    <string name="cDescriptionElemento">Perfil</string>
+
+    <!-- //Dashboard -->
+    <string name="tvTitleDashboard">Dashboard</string>
 
 </resources>

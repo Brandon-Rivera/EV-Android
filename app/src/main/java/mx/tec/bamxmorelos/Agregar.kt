@@ -88,13 +88,17 @@ class Agregar : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             val listener = Response.Listener<JSONObject> { response ->
 
 
-                Toast.makeText(this@Agregar, "Success", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@Agregar, "Agregado Exitosamente", Toast.LENGTH_SHORT).show()
                 Log.e("RESPONSE", response.toString())
+                val intent = Intent(this@Agregar, LandingPage::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or
+                        Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(intent)
             }
 
             val error = Response.ErrorListener { error ->
                 Log.e("ERROR", error.message!!)
-                Toast.makeText(this@Agregar, "Failed", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@Agregar, "No se agregó", Toast.LENGTH_SHORT).show()
             }
 
             val request = object: JsonObjectRequest(Request.Method.POST, url, body, listener, error){
