@@ -59,11 +59,13 @@ class Login : AppCompatActivity() {
                     Log.e("RESPONSE", response.toString())
                     if(response.get("mensaje") == "Usuario autenticado"){
 
-                        val sharedPreference = getSharedPreferences("archivo", Context.MODE_PRIVATE)
+                        val sharedPreference = getSharedPreferences("profile", Context.MODE_PRIVATE)
 
                         with(sharedPreference.edit()){
                             putString("user", binding.edtNombre.text.toString())
                             putString("password", binding.edtPassword.text.toString())
+                            putString("token", response.get("token").toString())
+                            putString("idUser", response.get("id").toString())
                             commit()
                         }
 

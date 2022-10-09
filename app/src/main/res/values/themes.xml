@@ -20,4 +20,11 @@
         <item name="backgroundTint">#09AB09</item>
     </style> -->
 
+    <style name="DatePickerTheme" parent="android:Theme.Material.Light.Dialog">
+        <item name="colorAccent">@color/purple_500</item>
+
+
+    </style>
+
+
 </resources>

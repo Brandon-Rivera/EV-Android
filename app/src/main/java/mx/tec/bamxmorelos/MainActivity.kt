@@ -31,7 +31,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         setContentView(R.layout.activity_main)
         supportActionBar?.hide()
         val clMain = findViewById<ConstraintLayout>(R.id.clMain)
-        val sharedPreference = getSharedPreferences("archivo", Context.MODE_PRIVATE)
+
+
+        val sharedPreference = getSharedPreferences("profile", Context.MODE_PRIVATE)
+
 
         requestPermission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
