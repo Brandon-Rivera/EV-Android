@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         val clMain = findViewById<ConstraintLayout>(R.id.clMain)
 
 
+
         val sharedPreference = getSharedPreferences("profile", Context.MODE_PRIVATE)
 
 
@@ -47,6 +48,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 mapa.addMarker(MarkerOptions().position(marcador))
             }
         }*/
+
 
         with(sharedPreference){
             val nombre = getString("nombre" ,"#" )

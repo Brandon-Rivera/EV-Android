@@ -30,6 +30,7 @@ class FamilyFragment : Fragment(R.layout.fragment_family){
         savedInstanceState: Bundle?
     ): View? {
 
+
         queue = Volley.newRequestQueue(context)
         val view = layoutInflater.inflate(R.layout.fragment_family, container, false)
         val fab = view.findViewById<FloatingActionButton>(R.id.fabAgregarFamilia)

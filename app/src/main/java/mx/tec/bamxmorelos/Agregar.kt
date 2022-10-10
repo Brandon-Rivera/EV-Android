@@ -8,8 +8,6 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.ListView
-import android.widget.Spinner
 import android.widget.Toast
 import androidx.core.view.isVisible
 import com.android.volley.Request
@@ -87,7 +85,6 @@ class Agregar : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
             val listener = Response.Listener<JSONObject> { response ->
 
-
                 Toast.makeText(this@Agregar, "Agregado Exitosamente", Toast.LENGTH_SHORT).show()
                 Log.e("RESPONSE", response.toString())
                 val intent = Intent(this@Agregar, LandingPage::class.java)
@@ -98,6 +95,7 @@ class Agregar : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
             val error = Response.ErrorListener { error ->
                 Log.e("ERROR", error.message!!)
+
                 Toast.makeText(this@Agregar, "No se agregó", Toast.LENGTH_SHORT).show()
             }
 

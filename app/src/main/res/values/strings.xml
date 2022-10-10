@@ -38,6 +38,8 @@
     <!--//Familia -->
     <string name="tvTitleFamilia">Mi Familia</string>
     <string name="fbtnDescriptionFamilia">Agregar miembro</string>
+
+    <!-- family -->
     <string name="titleFamilia">Mi Familia</string>
 
     <!--//Contacto -->
@@ -59,6 +61,7 @@
 
     <!-- //General -->
     <string name="logoBAMX">Logo BAMX</string>
+
 
     <!-- //Recycler -->
     <string name="txtNombre">Persona</string>
