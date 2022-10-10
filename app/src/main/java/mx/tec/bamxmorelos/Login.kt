@@ -30,10 +30,10 @@ class Login : AppCompatActivity() {
         binding  = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
-
+        userFocusListener()
+        pwdFocusListener()
 
         queue = Volley.newRequestQueue(this@Login)
-
 
         /*val btnRegistro = findViewById<Button>(R.id.btnRegistro)
         val btnLogin = findViewById<Button>(R.id.btnLogin)
@@ -45,11 +45,17 @@ class Login : AppCompatActivity() {
 
 
         binding.btnLogin.setOnClickListener {
-
+            if (!submitForm()){
+                Log.e("FName", binding.tiedtNombreLogin.text.toString())
+                Log.e("FPassword", binding.tiedtPasswordLogin.text.toString())
+            }
+            else {
+                Log.e("FFName", binding.tiedtNombreLogin.text.toString())
+                Log.e("FFPassword", binding.tiedtPasswordLogin.text.toString())
                 val body = JSONObject()
-                with(body){
-                    put("userName", binding.edtNombre.text.toString())
-                    put("userPassword", binding.edtPassword.text.toString())
+                with(body) {
+                    put("userName", binding.tiedtNombreLogin.text.toString())
+                    put("userPassword", binding.tiedtPasswordLogin.text.toString())
                 }
                 val url = "http://api-vacaciones.us-east-1.elasticbeanstalk.com/api/login"
 
@@ -57,13 +63,13 @@ class Login : AppCompatActivity() {
 
                 val listener = Response.Listener<JSONObject> { response ->
                     Log.e("RESPONSE", response.toString())
-                    if(response.get("mensaje") == "Usuario autenticado"){
+                    if (response.get("mensaje") == "Usuario autenticado") {
 
                         val sharedPreference = getSharedPreferences("profile", Context.MODE_PRIVATE)
 
-                        with(sharedPreference.edit()){
-                            putString("user", binding.edtNombre.text.toString())
-                            putString("password", binding.edtPassword.text.toString())
+                        with(sharedPreference.edit()) {
+                            putString("user", binding.tiedtNombreLogin.text.toString())
+                            putString("password", binding.tiedtPasswordLogin.text.toString())
                             putString("token", response.get("token").toString())
                             putString("idUser", response.get("id").toString())
                             commit()
@@ -73,26 +79,26 @@ class Login : AppCompatActivity() {
                         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or
                                 Intent.FLAG_ACTIVITY_NEW_TASK
                         startActivity(intent)
-                    }
-                    else {
-                        Toast.makeText(this@Login, "Usuario o contraseña incorrectos",
-                            Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(
+                            this@Login, "Usuario o contraseña incorrectos",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
                 val error = Response.ErrorListener { error ->
                     Log.e("ERROR", error.message!!)
-                    Toast.makeText(this@Login, error.message,
-                        Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@Login, error.message,
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
 
                 val request = JsonObjectRequest(Request.Method.POST, url, body, listener, error)
                 queue.add(request)
 
+            }
 
-            /*val intent = Intent(this@Login, LandingPage::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or
-                    Intent.FLAG_ACTIVITY_NEW_TASK
-            startActivity(intent)*/
         }
 
         binding.btnRegistro.setOnClickListener {
@@ -102,12 +108,47 @@ class Login : AppCompatActivity() {
             startActivity(intent)
         }
 
-        binding.btnForgotPassword.setOnClickListener {
-            val intent = Intent(this@Login, Password::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or
-                    Intent.FLAG_ACTIVITY_NEW_TASK
-            startActivity(intent)
+    }
 
+    private fun userFocusListener() {
+        binding.tiedtNombreLogin.setOnFocusChangeListener { _, hasFocus ->
+            if(!hasFocus){
+                binding.tilNombreLogin.helperText = validUser()
+            }
         }
     }
+
+    private fun pwdFocusListener() {
+        binding.tiedtPasswordLogin.setOnFocusChangeListener { _, hasFocus ->
+            if(!hasFocus){
+                binding.tilPasswordLogin.helperText = validPwd()
+            }
+        }
+    }
+
+    private fun submitForm(): Boolean {
+        binding.tilNombreLogin.helperText = validUser()
+        binding.tilPasswordLogin.helperText = validPwd()
+
+        val validUser = binding.tilNombreLogin.helperText == null
+        val validPwd = binding.tilPasswordLogin.helperText == null
+
+        return validUser && validPwd
+    }
+
+    private fun validPwd(): String? {
+        val pwdText = binding.tiedtPasswordLogin.text.toString()
+        if(pwdText == "")
+            return "*Requerido"
+        return null
+    }
+
+    private fun validUser(): String? {
+        val userText = binding.tiedtNombreLogin.text.toString()
+        if(userText == "")
+            return "*Requerido"
+        return null
+    }
+
+
 }

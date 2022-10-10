@@ -18,6 +18,7 @@
     <string name="tvRegistro">Registro</string>
     <string name="btnCancelarRegistro">Cancelar</string>
     <string name="edtCorreoRegistro">Correo</string>
+    <string name="pwdParameters">Mínimo x y máximo x caracteres</string>
 
     <!--//Password -->
     <string name="btnCambioPassword">Olvidé mi contraseña</string>
