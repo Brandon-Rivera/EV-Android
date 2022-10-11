@@ -36,7 +36,7 @@ class FamilyFragment : Fragment(R.layout.fragment_family){
         val fab = view.findViewById<FloatingActionButton>(R.id.fabAgregarFamilia)
         val sharedPreference = this.requireActivity().getSharedPreferences("profile", Context.MODE_PRIVATE)
         val userId = sharedPreference.getString("idUser", "#")
-            println(userId)
+        println(userId)
 
         val url = "http://api-vacaciones.us-east-1.elasticbeanstalk.com/api/famMemberByIdUser/$userId"
         val listener = Response.Listener<JSONArray> { response ->
@@ -47,7 +47,7 @@ class FamilyFragment : Fragment(R.layout.fragment_family){
                         response.getJSONObject(i).getString("names") + " " +
                                 response.getJSONObject(i).getString("lastNameD"),
                         response.getJSONObject(i).getString("isLeader").toInt(),
-                        R.mipmap.ic_launcher
+                        R.mipmap.ic_launcher_logo_round
                     )
                 )
 

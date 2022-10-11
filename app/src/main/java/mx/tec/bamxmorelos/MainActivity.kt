@@ -9,6 +9,7 @@ import android.location.LocationManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.WindowManager.BadTokenException
 import android.widget.Button
@@ -16,15 +17,22 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
+import com.android.volley.Request
+import com.android.volley.RequestQueue
+import com.android.volley.Response
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import org.json.JSONObject
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
     lateinit var locationManager: LocationManager
     lateinit var mapa: GoogleMap
     //lateinit var nombre:String
+    lateinit var queue: RequestQueue
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,11 +43,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
 
         val sharedPreference = getSharedPreferences("profile", Context.MODE_PRIVATE)
-
+        queue = Volley.newRequestQueue(this@MainActivity)
 
         requestPermission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        if(ActivityCompat.checkSelfPermission(this@MainActivity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) //Si el permiso se concedió, se activa el GPS
+        if(ActivityCompat.checkSelfPermission(this@MainActivity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){} //Si el permiso se concedió, se activa el GPS
 
         /*override fun onLocationChanged(location: Location) {
             //Toast.makeText(this@MainActivity, location.latitude.toString(), Toast.LENGTH_SHORT).show()
@@ -49,16 +57,39 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
         }*/
 
+        Thread {
 
-        with(sharedPreference){
-            val nombre = getString("nombre" ,"#" )
-            val password = getString("password", "#")
-            if (nombre != null) {
-                if (nombre != "#"){
-                    TODO()
+            val password = sharedPreference.getString("password", "#")
+            val nombre = sharedPreference.getString("user", "#")
+
+            val body = JSONObject()
+            with(body) {
+                put("userName", nombre)
+                put("userPassword", password)
+            }
+
+            val url = "http://api-vacaciones.us-east-1.elasticbeanstalk.com/api/login"
+
+            Log.e("URL", body.toString())
+
+            val listener = Response.Listener<JSONObject> { response ->
+                Log.e("RESPONSE", response.toString())
+                if (response.get("mensaje") == "Usuario autenticado") {
+
+                    val intent = Intent(this@MainActivity, LandingPage::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or
+                            Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(intent)
                 }
             }
-        }
+            val error = Response.ErrorListener { error ->
+                Log.e("ERROR", error.message!!)
+            }
+
+            val request =
+                JsonObjectRequest(Request.Method.POST, url, body, listener, error)
+            queue.add(request)
+        }.start()
 
         clMain.setOnClickListener(this)
     }

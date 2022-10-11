@@ -18,15 +18,19 @@ class CustomAdapter(private val context: Context, private val layout: Int,
         RecyclerView.ViewHolder(inflater.inflate(layout, parent, false)) {
         var imagen: ImageView? = null
         var nombre: TextView? = null
+        var edad: TextView? = null
 
         init {
             imagen = itemView.findViewById(R.id.imgImagen) as ImageView
             nombre = itemView.findViewById (R.id.txtNombre) as TextView
+            edad = itemView.findViewById(R.id.txtEdad) as TextView
+
         }
 
         fun bindData(elemento: Elemento) {
             imagen!!.setImageResource(elemento.imagen)
             nombre!!.text = elemento.nombre
+            edad!!.text = elemento.edad.toString()
         }
     }
 

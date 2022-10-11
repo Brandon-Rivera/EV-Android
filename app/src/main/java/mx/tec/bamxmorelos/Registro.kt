@@ -31,6 +31,7 @@ class Registro : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityRegistroBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        supportActionBar?.hide()
 
         val url = "http://api-vacaciones.us-east-1.elasticbeanstalk.com/api/register"
         //val clRegistro = findViewById<ConstraintLayout>(R.id.clRegistro)

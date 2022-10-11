@@ -16,7 +16,6 @@ import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import mx.tec.bamxmorelos.databinding.ActivityAgregarBinding
-import mx.tec.bamxmorelos.databinding.ActivityLoginBinding
 import org.json.JSONObject
 import java.sql.Date
 
@@ -27,7 +26,6 @@ class Agregar : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //setContentView(R.layout.activity_agregar)
         binding  = ActivityAgregarBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
@@ -99,7 +97,7 @@ class Agregar : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 Toast.makeText(this@Agregar, "No se agregó", Toast.LENGTH_SHORT).show()
             }
 
-            val request = object: JsonObjectRequest(Request.Method.POST, url, body, listener, error){
+            val request = object: JsonObjectRequest(Method.POST, url, body, listener, error){
                 override fun getHeaders(): MutableMap<String, String> {
                     val hashMap = HashMap<String, String>()
                     hashMap.put("x-access-token", sharedPreference.getString("token", "#").toString())
