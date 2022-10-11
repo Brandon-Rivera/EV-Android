@@ -38,8 +38,6 @@
     <!--//Familia -->
     <string name="tvTitleFamilia">Mi Familia</string>
     <string name="fbtnDescriptionFamilia">Agregar miembro</string>
-
-    <!-- family -->
     <string name="titleFamilia">Mi Familia</string>
 
     <!--//Contacto -->
@@ -70,5 +68,8 @@
 
     <!-- //Dashboard -->
     <string name="tvTitleDashboard">Dashboard</string>
+    <string name="btnRecomendacionesInfo">Recomendaciones</string>
+    <string name="btnLogoutInfo">Cerrar Sesión</string>
+
 
 </resources>
