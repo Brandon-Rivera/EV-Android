@@ -71,6 +71,9 @@
     <string name="btnRecomendacionesInfo">Recomendaciones</string>
     <string name="btnLogoutInfo">Cerrar Sesión</string>
     <string name="tiedHintResponse">Escribe tu respuesta</string>
+    <string name="btnAnteriorEncuesta">Anterior</string>
+    <string name="btnSiguienteEncuesta">Siguiente</string>
+    <string name="iBtnRegresar">Regresar</string>
 
 
 </resources>
