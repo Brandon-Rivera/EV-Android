@@ -70,6 +70,7 @@
     <string name="tvTitleDashboard">Dashboard</string>
     <string name="btnRecomendacionesInfo">Recomendaciones</string>
     <string name="btnLogoutInfo">Cerrar Sesión</string>
+    <string name="tiedHintResponse">Escribe tu respuesta</string>
 
 
 </resources>
