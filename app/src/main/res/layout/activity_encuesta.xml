@@ -6,15 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".Encuesta">
 
-    <LinearLayout
-        android:layout_width="391dp"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="1dp">
-
-    </LinearLayout>
-
     <Button
         android:id="@+id/button5"
         android:layout_width="wrap_content"
