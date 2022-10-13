@@ -80,11 +80,12 @@ class FamilyFragment : Fragment(R.layout.fragment_family){
                     return hashMap
                 }
             }
+
         queue.add(request)
 
         fab.setOnClickListener {
 
-            val intent = Intent(context, Encuesta::class.java)
+            val intent = Intent(context, Agregar::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or
                     Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(intent)

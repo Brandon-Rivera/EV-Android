@@ -75,6 +75,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             val listener = Response.Listener<JSONObject> { response ->
                 Log.e("RESPONSE", response.toString())
                 if (response.get("mensaje") == "Usuario autenticado") {
+                    sharedPreference.edit().putString("token", response.get("token").toString()).apply()
 
                     val intent = Intent(this@MainActivity, LandingPage::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or
@@ -88,7 +89,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
             val request =
                 JsonObjectRequest(Request.Method.POST, url, body, listener, error)
-            queue.add(request)
+            //queue.add(request)
         }.start()
 
         clMain.setOnClickListener(this)

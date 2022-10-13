@@ -30,7 +30,7 @@ class Agregar : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         setContentView(binding.root)
         supportActionBar?.hide()
 
-        val datos = listOf("Mujer", "Hombre")
+        val datos = listOf("No especificado", "Mujer", "Hombre")
 
 
         //1. contexto 2. layout 3. datos
