@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 Log.e("RESPONSE", response.toString())
                 if (response.get("mensaje") == "Usuario autenticado") {
 
-                    val intent = Intent(this@MainActivity, Encuesta::class.java)
+                    val intent = Intent(this@MainActivity, LandingPage::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or
                             Intent.FLAG_ACTIVITY_NEW_TASK
                     startActivity(intent)
@@ -107,7 +107,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onClick(v: View?){
-        val intent = Intent(this@MainActivity, Encuesta::class.java)
+        val intent = Intent(this@MainActivity, Login::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or
                 Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(intent)

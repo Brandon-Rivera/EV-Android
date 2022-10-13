@@ -74,6 +74,7 @@
     <string name="btnAnteriorEncuesta">Anterior</string>
     <string name="btnSiguienteEncuesta">Siguiente</string>
     <string name="iBtnRegresar">Regresar</string>
+    <string name="btnEmpezarEncuesta">Empezar</string>
 
 
 </resources>

@@ -84,7 +84,7 @@ class FamilyFragment : Fragment(R.layout.fragment_family){
 
         fab.setOnClickListener {
 
-            val intent = Intent(context, Agregar::class.java)
+            val intent = Intent(context, Encuesta::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or
                     Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(intent)
