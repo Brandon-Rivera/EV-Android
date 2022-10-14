@@ -12,11 +12,13 @@ import android.widget.ArrayAdapter
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.core.view.children
+import androidx.core.view.isVisible
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.Volley
+import com.google.android.material.textfield.TextInputEditText
 import mx.tec.bamxmorelos.adapter.CustomAdapter
 import mx.tec.bamxmorelos.databinding.ActivityEncuestaBinding
 import mx.tec.bamxmorelos.model.Elemento
@@ -32,6 +34,7 @@ class Encuesta : AppCompatActivity() {
         binding = ActivityEncuestaBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        this.requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
         queue = Volley.newRequestQueue(this@Encuesta)
 
@@ -53,6 +56,7 @@ class Encuesta : AppCompatActivity() {
         val listener = Response.Listener<JSONArray> { response ->
             res = response
             Log.e("RESPONSE", response.toString())
+
         }
 
         val error = Response.ErrorListener { error ->
@@ -84,6 +88,13 @@ class Encuesta : AppCompatActivity() {
                     "${response.getJSONObject(i).getString("names")} ${response.getJSONObject(i).getString("lastNameD")}"
                 )
             }
+            val adaptador = ArrayAdapter<String>(
+                this@Encuesta,
+                android.R.layout.simple_spinner_dropdown_item,
+                datos
+            )
+
+            binding.spNameIntegrante.adapter = adaptador
         }
 
         val errorFam = Response.ErrorListener { error ->
@@ -108,14 +119,6 @@ class Encuesta : AppCompatActivity() {
         val datoss = listOf("--Seleccionar --", "Mujer", "Hombre")
 
 
-        //1. contexto 2. layout 3. datos
-        val adaptador = ArrayAdapter<String>(
-            this@Encuesta,
-            android.R.layout.simple_spinner_dropdown_item,
-            datoss
-        )
-
-        binding.spNameIntegrante.adapter = adaptador
 
 
 
@@ -136,6 +139,7 @@ class Encuesta : AppCompatActivity() {
             binding.tvQuestion.visibility = VISIBLE
             binding.tvNameEncuesta.visibility = VISIBLE
             binding.tvNameEncuesta.text = binding.spNameIntegrante.selectedItem.toString()
+            viewType(res.getJSONObject(count).getInt("questionType"))
             onIdChanged(count)
         }
 
@@ -143,7 +147,8 @@ class Encuesta : AppCompatActivity() {
         binding.btnSiguiente.setOnClickListener {
             if(count+1 < res.length()) {
                 count += 1
-                viewType(count)
+                saveSelection()
+                viewType(res.getJSONObject(count).getInt("questionType"))
                 onIdChanged(count)
             }
         }
@@ -152,27 +157,71 @@ class Encuesta : AppCompatActivity() {
         binding.btnAnterior.setOnClickListener {
             if (count-1 >= 0) {
                 count -= 1
-                viewType(count)
+                saveSelection()
+                viewType(res.getJSONObject(count).getInt("questionType"))
                 onIdChanged(count)
             }
         }
     }
 
+    private fun saveSelection(count: Int) {
+        Log.e("SAVESELECTION",":)")
+        val sharedPreference = getSharedPreferences("profile", Context.MODE_PRIVATE)
+        if(binding.lRadio4.isVisible){
+            val sId = binding.rg4.checkedRadioButtonId
+            Log.e("R4", sId.toString())
+            val answer = findViewById<RadioButton>(sId).text.toString()
+            sharedPreference.edit().putString(count.toString(), answer).apply()
+
+
+        }
+
+        else if(binding.lRadio5.isVisible){
+            val sId = binding.rg5.checkedRadioButtonId
+            Log.e("R5", sId.toString())
+            val answer = findViewById<RadioButton>(sId).text.toString()
+            sharedPreference.edit().putString(count.toString(), answer).apply()
+
+        }
+
+        else if(binding.lRadio6.isVisible){
+            val sId = binding.rg6.checkedRadioButtonId
+            Log.e("R6", sId.toString())
+            val answer = findViewById<RadioButton>(sId).text.toString()
+            sharedPreference.edit().putString(count.toString(), answer).apply()
+
+        }
+
+        else if(binding.lRadio8.isVisible){
+            val sId = binding.rg8.checkedRadioButtonId
+            Log.e("R8", sId.toString())
+            val answer = findViewById<RadioButton>(sId).text.toString()
+            sharedPreference.edit().putString(count.toString(), answer).apply()
+
+        }
+
+       else  if(binding.lTexto.isVisible){
+            val answer = binding.tiedResponse.text.toString()
+            Log.e("ANSWER", answer)
+
+        }
+    }
 
 
     private fun onIdChanged(count: Int) {
 
         val options = mutableListOf<String>()
         val sharedPreference = getSharedPreferences("profile", Context.MODE_PRIVATE)
-
-        val idQ = res.getJSONObject(count).getString("id")
-        val urlOptions = "http://api-vacaciones.us-east-1.elasticbeanstalk.com/api/famMemberByIdUser/$idQ"
+        println(sharedPreference.all)
+        val idQ = res.getJSONObject(count).getString("qOptions")
+        val urlOptions = "http://api-vacaciones.us-east-1.elasticbeanstalk.com/api/questionsoptionsByQuesId/$idQ"
         println(urlOptions)
 
         val listener = Response.Listener<JSONArray> { response ->
+            println(response)
             for (i in 0 until response.length()) {
                 options.add(
-                    response.getJSONObject(i).getString("names")
+                    response.getJSONObject(i).getString("optionName")
                 )
             }
             println(response)
@@ -238,6 +287,12 @@ class Encuesta : AppCompatActivity() {
                 binding.rb86.text = options[5]
                 binding.rb87.text = options[6]
                 binding.rb88.text = options[7]
+            }
+            else ->{
+                binding.rb41.text = options[0]
+                binding.rb51.text = options[0]
+                binding.rb61.text = options[0]
+                binding.rb81.text = options[0]
             }
 
         }
