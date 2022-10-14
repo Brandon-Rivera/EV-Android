@@ -89,7 +89,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
             val request =
                 JsonObjectRequest(Request.Method.POST, url, body, listener, error)
-            //queue.add(request)
+            queue.add(request)
         }.start()
 
         clMain.setOnClickListener(this)

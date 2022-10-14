@@ -2,12 +2,14 @@ package mx.tec.bamxmorelos
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
@@ -20,10 +22,13 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import mx.tec.bamxmorelos.adapter.CustomAdapter
 import mx.tec.bamxmorelos.model.Elemento
 import org.json.JSONArray
+import java.time.LocalDate
+import java.time.LocalDateTime
 
 class FamilyFragment : Fragment(R.layout.fragment_family){
     lateinit var queue: RequestQueue
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -46,7 +51,7 @@ class FamilyFragment : Fragment(R.layout.fragment_family){
                     Elemento(
                         response.getJSONObject(i).getString("names") + " " +
                                 response.getJSONObject(i).getString("lastNameD"),
-                        response.getJSONObject(i).getString("isLeader").toInt(),
+                                response.getJSONObject(i).getInt("isLeader"),
                         R.mipmap.ic_launcher_logo_round
                     )
                 )
@@ -86,9 +91,10 @@ class FamilyFragment : Fragment(R.layout.fragment_family){
         fab.setOnClickListener {
 
             val intent = Intent(context, Agregar::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or
+            Intent.FLAG_ACTIVITY_CLEAR_TASK or
                     Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(intent)
+
         }
             return view
     }
