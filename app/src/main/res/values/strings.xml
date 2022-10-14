@@ -71,6 +71,12 @@
     <string name="btnRecomendacionesInfo">Recomendaciones</string>
     <string name="btnLogoutInfo">Cerrar Sesión</string>
     <string name="tiedHintResponse">Escribe tu respuesta</string>
+    <string name="btnAnteriorEncuesta">Anterior</string>
+    <string name="btnSiguienteEncuesta">Siguiente</string>
+    <string name="iBtnRegresar">Regresar</string>
+    <string name="btnEmpezarEncuesta">Empezar</string>
+    <string name="tvNamePicker">¿Quién está respondiendo?</string>
+    <string name="btnLogout">Cerrar Sesión</string>
 
 
 </resources>

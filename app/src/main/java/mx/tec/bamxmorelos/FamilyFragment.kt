@@ -80,6 +80,7 @@ class FamilyFragment : Fragment(R.layout.fragment_family){
                     return hashMap
                 }
             }
+
         queue.add(request)
 
         fab.setOnClickListener {
