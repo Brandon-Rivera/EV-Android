@@ -22,6 +22,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import mx.tec.bamxmorelos.adapter.CustomAdapter
 import mx.tec.bamxmorelos.model.Elemento
 import org.json.JSONArray
+import java.sql.Date
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -45,18 +46,26 @@ class FamilyFragment : Fragment(R.layout.fragment_family){
 
         val url = "http://api-vacaciones.us-east-1.elasticbeanstalk.com/api/famMemberByIdUser/$userId"
         val listener = Response.Listener<JSONArray> { response ->
+
+            println(response.toString())
+
             var datos = mutableListOf<Elemento>()
             for (i in 0 until response.length()) {
+                val date = response.getJSONObject(i).getString("birthDate").subSequence(0, response.getJSONObject(i).getString("birthDate").length-1)
+                println(date)
+                val dob = LocalDateTime.parse(date)
+                val today = LocalDate.now()
+                var age = today.year - dob.year
+                if (today.dayOfYear < dob.dayOfYear)
+                    age--
                 datos.add(
                     Elemento(
                         response.getJSONObject(i).getString("names") + " " +
                                 response.getJSONObject(i).getString("lastNameD"),
-                                response.getJSONObject(i).getInt("isLeader"),
+                                age,
                         R.mipmap.ic_launcher_logo_round
                     )
                 )
-
-                println(response.toString())
             }
 
             val rcView = view.findViewById<RecyclerView>(R.id.rcvMiembrosFamilia)
@@ -99,3 +108,4 @@ class FamilyFragment : Fragment(R.layout.fragment_family){
             return view
     }
 }
+

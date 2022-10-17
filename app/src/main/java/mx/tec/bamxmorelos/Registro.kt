@@ -33,6 +33,9 @@ class Registro : AppCompatActivity() {
         setContentView(binding.root)
         supportActionBar?.hide()
 
+        this.requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+
+
         val url = "http://api-vacaciones.us-east-1.elasticbeanstalk.com/api/register"
         //val clRegistro = findViewById<ConstraintLayout>(R.id.clRegistro)
 
@@ -63,18 +66,16 @@ class Registro : AppCompatActivity() {
                 jsonBody.put("eMail", binding.tiedCorreoRegistro.text.toString())
 
                 val listener = Response.Listener<JSONObject> { response ->
-                    Toast.makeText(this@Registro, "Usuario creado exitosamente", Toast.LENGTH_SHORT).show()
+
                     if (response.get("mensaje").toString() == "Usuario creado") {
                         Log.e("RESPONSE", response.toString())
-                        /*val mySnackbar = Snackbar.make(
-                            findViewById(R.id.clRegistro),
-                            "Usuario creado exitosamente",
-                            Snackbar.LENGTH_SHORT
-                        ).show()*/
+
+                        Toast.makeText(this@Registro, "Usuario creado exitosamente", Toast.LENGTH_SHORT).show()
+
                         val intent = Intent(this@Registro, Login::class.java)
-                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or
-                                Intent.FLAG_ACTIVITY_NEW_TASK
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
                         startActivity(intent)
+
                     }
 
                 }

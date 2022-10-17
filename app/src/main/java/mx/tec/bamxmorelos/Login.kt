@@ -30,6 +30,8 @@ class Login : AppCompatActivity() {
         binding  = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
+        this.requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+
         userFocusListener()
         pwdFocusListener()
 
@@ -57,6 +59,9 @@ class Login : AppCompatActivity() {
                     put("userName", binding.tiedtNombreLogin.text.toString())
                     put("userPassword", binding.tiedtPasswordLogin.text.toString())
                 }
+
+                LoadingDialog.display(this@Login)
+
                 val url = "http://api-vacaciones.us-east-1.elasticbeanstalk.com/api/login"
 
                 Log.e("URL", body.toString())
@@ -78,8 +83,11 @@ class Login : AppCompatActivity() {
                         val intent = Intent(this@Login, LandingPage::class.java)
                         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or
                                 Intent.FLAG_ACTIVITY_NEW_TASK
+
+                        LoadingDialog.dismiss()
                         startActivity(intent)
                     } else {
+                        LoadingDialog.dismiss()
                         Toast.makeText(
                             this@Login, "Usuario o contraseña incorrectos",
                             Toast.LENGTH_SHORT

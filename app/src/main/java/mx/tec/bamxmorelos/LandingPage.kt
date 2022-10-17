@@ -24,6 +24,8 @@ class LandingPage : AppCompatActivity(), LocationListener {
         setContentView(R.layout.activity_landing_page)
         supportActionBar?.hide()
 
+        this.requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
         val landingFragment = LandingFragment()

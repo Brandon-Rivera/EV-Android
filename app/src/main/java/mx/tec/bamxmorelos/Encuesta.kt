@@ -1,8 +1,14 @@
 package mx.tec.bamxmorelos
 
+import android.Manifest
 import android.R
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -11,30 +17,48 @@ import android.view.View.*
 import android.widget.ArrayAdapter
 import android.widget.RadioButton
 import android.widget.RadioGroup
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
 import androidx.core.view.children
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonArrayRequest
+import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import mx.tec.bamxmorelos.adapter.CustomAdapter
 import mx.tec.bamxmorelos.databinding.ActivityEncuestaBinding
 import mx.tec.bamxmorelos.model.Elemento
 import org.json.JSONArray
+import org.json.JSONObject
+import java.sql.Date
+import java.time.LocalDateTime
+import kotlin.properties.Delegates
 
-class Encuesta : AppCompatActivity() {
+class Encuesta : AppCompatActivity(), LocationListener {
     lateinit var binding: ActivityEncuestaBinding
     lateinit var queue: RequestQueue
+    lateinit var locationManager: LocationManager
+    var res = JSONArray()
 
-    var  res = JSONArray()
-
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityEncuestaBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         this.requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+
+        locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
+
 
         queue = Volley.newRequestQueue(this@Encuesta)
 
@@ -64,7 +88,7 @@ class Encuesta : AppCompatActivity() {
         }
 
         val request =
-            object : JsonArrayRequest(Request.Method.GET, url, null, listener, error) {
+            object : JsonArrayRequest(Method.GET, url, null, listener, error) {
                 override fun getHeaders(): MutableMap<String, String> {
                     val hashMap = HashMap<String, String>()
                     hashMap.put(
@@ -80,12 +104,15 @@ class Encuesta : AppCompatActivity() {
 
         val datos = mutableListOf<String>()
         val idUser = sharedPreference.getString("idUser", "#")
-        val urlFam = "http://api-vacaciones.us-east-1.elasticbeanstalk.com/api/famMemberByIdUser/$idUser"
+        val urlFam =
+            "http://api-vacaciones.us-east-1.elasticbeanstalk.com/api/famMemberByIdUser/$idUser"
 
         val listenerFam = Response.Listener<JSONArray> { response ->
             for (i in 0 until response.length()) {
                 datos.add(
-                    "${response.getJSONObject(i).getString("names")} ${response.getJSONObject(i).getString("lastNameD")}"
+                    "${response.getJSONObject(i).getString("names")} ${
+                        response.getJSONObject(i).getString("lastNameD")
+                    }"
                 )
             }
             val adaptador = ArrayAdapter<String>(
@@ -97,13 +124,13 @@ class Encuesta : AppCompatActivity() {
             binding.spNameIntegrante.adapter = adaptador
         }
 
-        val errorFam = Response.ErrorListener { error ->
-            Log.e("ERROR", error.message!!)
+        val errorFam = Response.ErrorListener { errorFam ->
+            Log.e("ERRORFam", errorFam.message!!)
         }
 
 
         val requestFam =
-            object : JsonArrayRequest(Request.Method.GET, urlFam, null, listenerFam, errorFam) {
+            object : JsonArrayRequest(Method.GET, urlFam, null, listenerFam, errorFam) {
                 override fun getHeaders(): MutableMap<String, String> {
                     val hashMap = HashMap<String, String>()
                     hashMap.put(
@@ -123,7 +150,7 @@ class Encuesta : AppCompatActivity() {
 
 
 
-        binding.iBtnBack.setOnClickListener{
+        binding.iBtnBack.setOnClickListener {
             val intent = Intent(this@Encuesta, LandingPage::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or
                     Intent.FLAG_ACTIVITY_NEW_TASK
@@ -132,78 +159,261 @@ class Encuesta : AppCompatActivity() {
         }
         //Cambiar de Inicio de Encuesta a primera pregunta
         binding.btnStartEncuesta.setOnClickListener {
-            binding.lName.visibility = GONE
-            binding.btnSiguiente.visibility = VISIBLE
-            binding.btnAnterior.visibility = VISIBLE
-            binding.tvId.visibility = VISIBLE
-            binding.tvQuestion.visibility = VISIBLE
-            binding.tvNameEncuesta.visibility = VISIBLE
-            binding.tvNameEncuesta.text = binding.spNameIntegrante.selectedItem.toString()
-            viewType(res.getJSONObject(count).getInt("questionType"))
-            onIdChanged(count)
+
+            fun sendLocation(location: Location) {
+                val body = JSONObject()
+                with(body) {
+                    put("idUser", sharedPreference.getString("idUser", "#"))
+                    put("placeName", "")
+                    put("lat", location.latitude)
+                    put("lon", location.longitude)
+                    put("street", "")
+                    put("extNum", "")
+                    put("intNum", "")
+                    put("suburb", "")
+                    put("postalCode", "")
+                    put("city", "")
+                    put("stateN", "")
+                }
+
+                val listenerUbi = Response.Listener<JSONObject> { response ->
+
+                    Toast.makeText(this@Encuesta, "Ubicacion registrada", Toast.LENGTH_SHORT).show()
+                    Log.e("RESPONSE", response.toString())
+                    val intent = Intent(this@Encuesta, LandingPage::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or
+                            Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(intent)
+                }
+
+                val errorUbi = Response.ErrorListener { error ->
+                    Log.e("ERROR", error.message!!)
+
+                    Toast.makeText(this@Encuesta, "Ubicacion no registrada", Toast.LENGTH_SHORT)
+                        .show()
+                }
+
+                val url = "http://api-vacaciones.us-east-1.elasticbeanstalk.com/api/slocation"
+                val requestUbi =
+                    object : JsonObjectRequest(Method.POST, url, body, listenerUbi, errorUbi) {
+                        override fun getHeaders(): MutableMap<String, String> {
+                            val hashMap = HashMap<String, String>()
+                            hashMap.put(
+                                "x-access-token",
+                                sharedPreference.getString("token", "#").toString()
+                            )
+                            return hashMap
+                        }
+                    }
+                queue.add(requestUbi)
+            }
+
+            if (ActivityCompat.checkSelfPermission(
+                    this@Encuesta,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                binding.lName.visibility = GONE
+                binding.btnSiguiente.visibility = VISIBLE
+                binding.btnAnterior.visibility = VISIBLE
+                binding.tvId.visibility = VISIBLE
+                binding.tvQuestion.visibility = VISIBLE
+                binding.tvNameEncuesta.visibility = VISIBLE
+                binding.tvNameEncuesta.text = binding.spNameIntegrante.selectedItem.toString()
+                viewType(res.getJSONObject(count).getInt("questionType"))
+                onIdChanged(count)
+
+            } else {
+                Toast.makeText(this@Encuesta, "Se necesita acceso a GPS", Toast.LENGTH_SHORT).show()
+            }
         }
 
         //Avanzar en preguntas de encuesta
         binding.btnSiguiente.setOnClickListener {
-            if(count+1 < res.length()) {
+            if (count + 1 < res.length()) {
                 count += 1
-                saveSelection()
+                saveSelection(count)
                 viewType(res.getJSONObject(count).getInt("questionType"))
                 onIdChanged(count)
             }
+            if (count + 1 == 2) { //<-- Regresar a res.length()
+                binding.btnSiguiente.visibility = INVISIBLE
+                binding.btnSubmit.visibility = VISIBLE
+
+            } else {
+                binding.btnSiguiente.visibility = VISIBLE
+                binding.btnSubmit.visibility = GONE
+            }
+
+
         }
 
         //Regresar en preguntas de encuesta
         binding.btnAnterior.setOnClickListener {
-            if (count-1 >= 0) {
+            if (count - 1 >= 0) {
                 count -= 1
-                saveSelection()
+                saveSelection(count)
                 viewType(res.getJSONObject(count).getInt("questionType"))
                 onIdChanged(count)
+
+                if (count + 1 == res.length()) {
+                    binding.btnSiguiente.visibility = INVISIBLE
+                    binding.btnSubmit.visibility = VISIBLE
+
+                } else {
+                    binding.btnSiguiente.visibility = VISIBLE
+                    binding.btnSubmit.visibility = GONE
+                }
             }
+        }
+
+        binding.btnSubmit.setOnClickListener {
+            saveSelection(count)
+            val answers = JSONArray()
+            val timeAnswered = LocalDateTime.now()
+            val userId = sharedPreference.getString("idUser", "#")?.toInt()
+            var idTemp =
+                (userId.toString() + timeAnswered.year.toString() + timeAnswered.monthValue.toString() + timeAnswered.dayOfMonth.toString()).toInt()
+
+            val urlUser =
+                "http://api-vacaciones.us-east-1.elasticbeanstalk.com/api/famMemberByIdUser/$userId"
+            val listenerUser = Response.Listener<JSONArray> { response ->
+                var name = "Jane Doe"
+                for (i in 0 until response.length()) {
+                    name = "${
+                        response.getJSONObject(i).getString("names")
+                    } ${response.getJSONObject(i).getString("lastNameD")}"
+
+                    if (binding.tvNameEncuesta.text.toString() == name) {
+
+                        for (j in 1 until count) {
+                            val answer = JSONObject()
+                            val opt = sharedPreference.getString(j.toString(), "#")
+
+                            answer.put("id", idTemp)
+                            answer.put("idQuestion", j)
+                            answer.put("idUser", userId)
+                            answer.put("idMember", response.getJSONObject(i).getInt("id"))
+                            answer.put("timeAnswered", timeAnswered)
+                            answer.put("idRow", 0)
+                            answer.put("answer", opt)
+
+                            answers.put(answer)
+
+                            //sharedPreference.edit().remove(i.toString()).apply()
+                        }
+                        println(answers)
+                    }
+                }
+            }
+
+            val errorUser = Response.ErrorListener { error ->
+                Log.e("ERRORUser", error.message!!)
+            }
+
+            val requestUser =
+                object : JsonArrayRequest(
+                    Method.GET,
+                    urlUser,
+                    null,
+                    listenerUser,
+                    errorUser
+                ) {
+                    override fun getHeaders(): MutableMap<String, String> {
+                        val hashMap = HashMap<String, String>()
+                        hashMap.put(
+                            "x-access-token",
+                            sharedPreference.getString("token", "#").toString()
+                        )
+                        return hashMap
+                    }
+                }
+
+            queue.add(requestUser)
+
+            val urlSubmit =
+                "http://api-vacaciones.us-east-1.elasticbeanstalk.com/api/subquestionanswer"
+            val listenerSubmit = Response.Listener<JSONArray> { response ->
+                Log.e("RESPONSE", response.toString())
+                val mySnackbar = Snackbar.make(
+                    findViewById(mx.tec.bamxmorelos.R.id.clEncuesta),
+                    "Enviada exitosamente",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+
+            }
+
+            val errorSubmit = Response.ErrorListener { error ->
+                Log.e("ERRORSubmit", error.message!!.toString())
+                val mySnackbar = Snackbar.make(
+                    findViewById(mx.tec.bamxmorelos.R.id.clEncuesta),
+                    "Envío fallido",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            }
+
+            val requestSubmit =
+                object : JsonArrayRequest(
+                    Method.POST,
+                    urlSubmit,
+                    answers,
+                    listenerSubmit,
+                    errorSubmit
+                ) {
+                    override fun getHeaders(): MutableMap<String, String> {
+                        val hashMap = HashMap<String, String>()
+                        hashMap.put(
+                            "x-access-token",
+                            sharedPreference.getString("token", "#").toString()
+                        )
+                        return hashMap
+                    }
+                }
+
+            queue.add(requestSubmit)
+            /*
+            val intent = Intent(this@Encuesta, LandingPage::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)*/
+
         }
     }
 
+
     private fun saveSelection(count: Int) {
-        Log.e("SAVESELECTION",":)")
+        //Log.e("SAVESELECTION", ":)")
         val sharedPreference = getSharedPreferences("profile", Context.MODE_PRIVATE)
-        if(binding.lRadio4.isVisible){
+        if (binding.lRadio4.isVisible) {
             val sId = binding.rg4.checkedRadioButtonId
-            Log.e("R4", sId.toString())
+            //Log.e("R4", sId.toString())
             val answer = findViewById<RadioButton>(sId).text.toString()
             sharedPreference.edit().putString(count.toString(), answer).apply()
-
-
-        }
-
-        else if(binding.lRadio5.isVisible){
+            binding.rg4.clearCheck()
+        } else if (binding.lRadio5.isVisible) {
             val sId = binding.rg5.checkedRadioButtonId
-            Log.e("R5", sId.toString())
+            //Log.e("R5", sId.toString())
             val answer = findViewById<RadioButton>(sId).text.toString()
             sharedPreference.edit().putString(count.toString(), answer).apply()
+            binding.rg4.clearCheck()
 
-        }
-
-        else if(binding.lRadio6.isVisible){
+        } else if (binding.lRadio6.isVisible) {
             val sId = binding.rg6.checkedRadioButtonId
-            Log.e("R6", sId.toString())
+            //Log.e("R6", sId.toString())
             val answer = findViewById<RadioButton>(sId).text.toString()
             sharedPreference.edit().putString(count.toString(), answer).apply()
+            binding.rg4.clearCheck()
 
-        }
-
-        else if(binding.lRadio8.isVisible){
+        } else if (binding.lRadio8.isVisible) {
             val sId = binding.rg8.checkedRadioButtonId
-            Log.e("R8", sId.toString())
+            //Log.e("R8", sId.toString())
             val answer = findViewById<RadioButton>(sId).text.toString()
             sharedPreference.edit().putString(count.toString(), answer).apply()
+            binding.rg4.clearCheck()
 
-        }
-
-       else  if(binding.lTexto.isVisible){
+        } else if (binding.lTexto.isVisible) {
             val answer = binding.tiedResponse.text.toString()
-            Log.e("ANSWER", answer)
-
+            //Log.e("ANSWER", answer)
+            binding.tiedResponse.text?.clear()
         }
     }
 
@@ -214,7 +424,8 @@ class Encuesta : AppCompatActivity() {
         val sharedPreference = getSharedPreferences("profile", Context.MODE_PRIVATE)
         println(sharedPreference.all)
         val idQ = res.getJSONObject(count).getString("qOptions")
-        val urlOptions = "http://api-vacaciones.us-east-1.elasticbeanstalk.com/api/questionsoptionsByQuesId/$idQ"
+        val urlOptions =
+            "http://api-vacaciones.us-east-1.elasticbeanstalk.com/api/questionsoptionsByQuesId/$idQ"
         println(urlOptions)
 
         val listener = Response.Listener<JSONArray> { response ->
@@ -224,9 +435,6 @@ class Encuesta : AppCompatActivity() {
                     response.getJSONObject(i).getString("optionName")
                 )
             }
-            println(response)
-            println(options)
-
             fillOptions(options)
 
         }
@@ -236,7 +444,7 @@ class Encuesta : AppCompatActivity() {
         }
 
         val requestOptions =
-            object : JsonArrayRequest(Request.Method.GET, urlOptions, null, listener, error) {
+            object : JsonArrayRequest(Method.GET, urlOptions, null, listener, error) {
                 override fun getHeaders(): MutableMap<String, String> {
                     val hashMap = HashMap<String, String>()
                     hashMap.put(
@@ -254,9 +462,9 @@ class Encuesta : AppCompatActivity() {
         //binding.tvRow.text = resp.getJSONObject(idQ.toInt()).getString("optionValue")
     }
 
-    private fun fillOptions(options: List<String> ) {
+    private fun fillOptions(options: List<String>) {
 
-        when( options.size) {
+        when (options.size) {
             4 -> {
                 binding.rb41.text = options[0]
                 binding.rb42.text = options[1]
@@ -288,7 +496,7 @@ class Encuesta : AppCompatActivity() {
                 binding.rb87.text = options[6]
                 binding.rb88.text = options[7]
             }
-            else ->{
+            else -> {
                 binding.rb41.text = options[0]
                 binding.rb51.text = options[0]
                 binding.rb61.text = options[0]
@@ -298,10 +506,9 @@ class Encuesta : AppCompatActivity() {
         }
     }
 
-
     //Activar layout correspondiente al tipo de pregunta
     private fun viewType(questionType: Int) {
-        when (questionType){
+        when (questionType) {
             1 -> {
                 binding.lTexto.visibility = VISIBLE
                 binding.lRadio4.visibility = GONE
@@ -362,4 +569,7 @@ class Encuesta : AppCompatActivity() {
         }
     }
 
+    override fun onLocationChanged(location: Location) {
+        TODO()
+    }
 }

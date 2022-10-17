@@ -10,11 +10,11 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.view.isVisible
-import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.google.android.material.snackbar.Snackbar
 import mx.tec.bamxmorelos.databinding.ActivityAgregarBinding
 import org.json.JSONObject
 import java.sql.Date
@@ -29,8 +29,10 @@ class Agregar : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         binding  = ActivityAgregarBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
+        this.requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
         val datos = listOf("No especificado", "Mujer", "Hombre")
+        pregnancyFocusListener()
 
 
         //1. contexto 2. layout 3. datos
@@ -54,8 +56,7 @@ class Agregar : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
         binding.iBtnBackAgregar.setOnClickListener{
             val intent = Intent(this@Agregar, LandingPage::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or
-            Intent.FLAG_ACTIVITY_NEW_TASK
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
         }
 
@@ -84,17 +85,22 @@ class Agregar : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             val listener = Response.Listener<JSONObject> { response ->
 
                 Toast.makeText(this@Agregar, "Agregado Exitosamente", Toast.LENGTH_SHORT).show()
+
                 Log.e("RESPONSE", response.toString())
                 val intent = Intent(this@Agregar, LandingPage::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or
-                        Intent.FLAG_ACTIVITY_NEW_TASK
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                 startActivity(intent)
             }
 
             val error = Response.ErrorListener { error ->
                 Log.e("ERROR", error.message!!)
 
-                Toast.makeText(this@Agregar, "No se agregó", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(this@Agregar, "No se agregó", Toast.LENGTH_SHORT).show()
+                val mySnackbar = Snackbar.make(
+                    findViewById(R.id.clAgregar),
+                    "No se pudo agregar miembro",
+                    Snackbar.LENGTH_SHORT
+                ).show()
             }
 
             val request = object: JsonObjectRequest(Method.POST, url, body, listener, error){
@@ -111,11 +117,25 @@ class Agregar : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        binding.cbPregnantAgregar.isVisible = binding.spSexoAgregar.selectedItem!= "Hombre"
+        binding.cbPregnantAgregar.visibility = View.VISIBLE
+    }
+
+    private fun pregnancyFocusListener() {
+        binding.spSexoAgregar.setOnFocusChangeListener { _, hasFocus ->
+            if(!hasFocus){
+                if (binding.spSexoAgregar.selectedItem == "Mujer") {
+                    binding.cbPregnantAgregar.visibility = View.VISIBLE
+                }
+                else {
+                    binding.cbPregnantAgregar.visibility = View.INVISIBLE
+                }
+            }
+        }
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
-        TODO("Not yet implemented")
+        binding.cbPregnantAgregar.visibility = View.VISIBLE
+
     }
 
     private fun showDatePickerDialog(){

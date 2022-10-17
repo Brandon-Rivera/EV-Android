@@ -9,6 +9,7 @@ import android.location.LocationManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.view.WindowManager.BadTokenException
@@ -38,6 +39,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         supportActionBar?.hide()
+        this.requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+
         val clMain = findViewById<ConstraintLayout>(R.id.clMain)
 
 
@@ -57,8 +60,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
         }*/
 
-        Thread {
 
+            LoadingDialog.display(this@MainActivity)
             val password = sharedPreference.getString("password", "#")
             val nombre = sharedPreference.getString("user", "#")
 
@@ -75,22 +78,27 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             val listener = Response.Listener<JSONObject> { response ->
                 Log.e("RESPONSE", response.toString())
                 if (response.get("mensaje") == "Usuario autenticado") {
+
+                    LoadingDialog.dismiss()
+
                     sharedPreference.edit().putString("token", response.get("token").toString()).apply()
 
                     val intent = Intent(this@MainActivity, LandingPage::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or
-                            Intent.FLAG_ACTIVITY_NEW_TASK
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                     startActivity(intent)
                 }
+                LoadingDialog.dismiss()
             }
             val error = Response.ErrorListener { error ->
                 Log.e("ERROR", error.message!!)
+
             }
 
             val request =
                 JsonObjectRequest(Request.Method.POST, url, body, listener, error)
             queue.add(request)
-        }.start()
+
+
 
         clMain.setOnClickListener(this)
     }
@@ -109,8 +117,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onClick(v: View?){
         val intent = Intent(this@MainActivity, Login::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or
-                Intent.FLAG_ACTIVITY_NEW_TASK
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         startActivity(intent)
     }
 }

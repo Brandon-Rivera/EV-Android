@@ -79,6 +79,10 @@
     <string name="btnLogout">Cerrar Sesión</string>
     <string name="tvAboutLanding">¿Quiénes somos?</string>
     <string name="tvDescriptionLanding">Somos una OSC (Organización de la sociedad civil) sin fines de lucro y apartidista, nuestra red está compuesta por 54 Bancos de Alimentos los cuales rescatan alimento a lo largo de toda la cadena de valor para llevarlo a familias, comunidades e instituciones que lo necesitan y así mejorar la alimentación y la nutrición en México.</string>
+    <string name="textSubmit">Enviar</string>
+    <string name="btnSubmit">Enviar</string>
+    <string name="btnEncuestaInfo">Encuesta</string>
+    <string name="tvCargando">Cargando...</string>
 
 
 </resources>
