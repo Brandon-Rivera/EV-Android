@@ -83,6 +83,13 @@
     <string name="btnSubmit">Enviar</string>
     <string name="btnEncuestaInfo">Encuesta</string>
     <string name="tvCargando">Cargando...</string>
+    <string name="txtEdadElemento">Años</string>
+    <string name="btnCerrarContacto">Cerrar</string>
+    <string name="correoBamx">atencion@bamorelos.org</string>
+    <string name="telBamxSecundario">777 317 5516</string>
+    <string name="telBamxPrimario">777 102 1334</string>
+    <string name="direccionBamxCuernavaca">Eugenio J. Cañas #11, entre Acacias y Priv. Compostela, Lomas de la Pradera en Cuernavaca, Morelos. C.P. 62175</string>
+    <string name="centroCva">Cuernavaca</string>
 
 
 </resources>

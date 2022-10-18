@@ -5,6 +5,7 @@
     android:id="@+id/clEncuesta"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bgDark"
     tools:context=".Encuesta">
 
     <ImageButton
@@ -13,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:backgroundTint="#00FFFFFF"
         android:contentDescription="@string/iBtnRegresar"
         android:minHeight="48dp"
@@ -25,53 +26,36 @@
         android:id="@+id/btnAnterior"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="60dp"
         android:text="@string/btnAnteriorEncuesta"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnSiguiente"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
     <Button
         android:id="@+id/btnSiguiente"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="60dp"
         android:text="@string/btnSiguienteEncuesta"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btnAnterior" />
+        app:layout_constraintStart_toEndOf="@+id/btnAnterior"
+        app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
-    <TextView
-        android:id="@+id/tvId"
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/btnSubmit"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="30dp"
-        android:text=""
-        android:textColor="@color/purple_700"
-        android:textSize="18sp"
+        android:text="@string/btnSubmit"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvNameEncuesta" />
-
-    <TextView
-        android:id="@+id/tvQuestion"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="30dp"
-        android:text=""
-        android:textColor="@color/purple_700"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvId" />
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btnAnterior"
+        app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
     <TextView
         android:id="@+id/tvNameEncuesta"
@@ -83,291 +67,325 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="@color/purple_700"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/lTexto"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        android:paddingStart="30dp"
-        android:paddingTop="20dp"
-        android:paddingEnd="30dp"
-        android:paddingBottom="50dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/btnAnterior"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="16dp"
+        android:elevation="20dp"
+        app:cardCornerRadius="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvQuestion">
+        app:layout_constraintTop_toBottomOf="@+id/tvNameEncuesta">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tiledResponse"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            app:counterMaxLength="300">
+            android:layout_height="match_parent"
+            android:paddingBottom="30dp">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/tiedResponse"
+            <TextView
+                android:id="@+id/tvQuestion"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="@string/tiedHintResponse"
-                android:maxLength="300" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_height="wrap_content"
+                android:paddingStart="16dp"
+                android:paddingTop="10dp"
+                android:paddingEnd="16dp"
+                android:text=""
+                android:textColor="@color/purple_700"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvId" />
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/lName"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        android:paddingStart="30dp"
-        android:paddingTop="50dp"
-        android:paddingEnd="30dp"
-        android:paddingBottom="50dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/btnAnterior"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvQuestion">
-
-        <TextView
-            android:id="@+id/tvNameIntegrante"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="30dp"
-            android:text="@string/tvNamePicker"
-            android:textAlignment="center"
-            android:textSize="18sp" />
-
-        <Spinner
-            android:id="@+id/spNameIntegrante"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="50dp"
-            android:foregroundTint="@color/purple_500"
-            android:minHeight="48dp" />
-
-        <Button
-            android:id="@+id/btnStartEncuesta"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/btnEmpezarEncuesta" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/lRadio4"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:orientation="vertical"
-        android:paddingStart="50dp"
-        android:paddingEnd="50dp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvQuestion">
-
-        <RadioGroup
-            android:id="@+id/rg4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <RadioButton
-                android:id="@+id/rb41"
+            <TextView
+                android:id="@+id/tvId"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="36dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text=""
+                android:textColor="@color/purple_700"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <RadioButton
-                android:id="@+id/rb42"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:id="@+id/lRadio5"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingStart="50dp"
+                android:paddingEnd="50dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvQuestion">
 
-            <RadioButton
-                android:id="@+id/rb43"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                <RadioGroup
+                    android:id="@+id/rg5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-            <RadioButton
-                android:id="@+id/rb44"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </RadioGroup>
-    </LinearLayout>
+                    <RadioButton
+                        android:id="@+id/rb51"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
 
-    <LinearLayout
-        android:id="@+id/lRadio5"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:orientation="vertical"
-        android:paddingStart="50dp"
-        android:paddingEnd="50dp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvQuestion">
+                    <RadioButton
+                        android:id="@+id/rb52"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
 
-        <RadioGroup
-            android:id="@+id/rg5"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+                    <RadioButton
+                        android:id="@+id/rb53"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
 
-            <RadioButton
-                android:id="@+id/rb51"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                    <RadioButton
+                        android:id="@+id/rb54"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
 
-            <RadioButton
-                android:id="@+id/rb52"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                    <RadioButton
+                        android:id="@+id/rb55"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </RadioGroup>
+            </LinearLayout>
 
-            <RadioButton
-                android:id="@+id/rb53"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:id="@+id/lRadio6"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingStart="50dp"
+                android:paddingEnd="50dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvQuestion">
 
-            <RadioButton
-                android:id="@+id/rb54"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                <RadioGroup
+                    android:id="@+id/rg6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-            <RadioButton
-                android:id="@+id/rb55"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </RadioGroup>
-    </LinearLayout>
+                    <RadioButton
+                        android:id="@+id/rb61"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
 
-    <LinearLayout
-        android:id="@+id/lRadio6"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:orientation="vertical"
-        android:paddingStart="50dp"
-        android:paddingEnd="50dp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvQuestion">
+                    <RadioButton
+                        android:id="@+id/rb62"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
 
-        <RadioGroup
-            android:id="@+id/rg6"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+                    <RadioButton
+                        android:id="@+id/rb63"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
 
-            <RadioButton
-                android:id="@+id/rb61"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                    <RadioButton
+                        android:id="@+id/rb64"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
 
-            <RadioButton
-                android:id="@+id/rb62"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                    <RadioButton
+                        android:id="@+id/rb65"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
 
-            <RadioButton
-                android:id="@+id/rb63"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                    <RadioButton
+                        android:id="@+id/rb66"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </RadioGroup>
+            </LinearLayout>
 
-            <RadioButton
-                android:id="@+id/rb64"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:id="@+id/lRadio4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingStart="50dp"
+                android:paddingEnd="50dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvQuestion">
 
-            <RadioButton
-                android:id="@+id/rb65"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                <RadioGroup
+                    android:id="@+id/rg4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-            <RadioButton
-                android:id="@+id/rb66"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </RadioGroup>
-    </LinearLayout>
+                    <RadioButton
+                        android:id="@+id/rb41"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
 
-    <LinearLayout
-        android:id="@+id/lRadio8"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:orientation="vertical"
-        android:paddingStart="50dp"
-        android:paddingEnd="50dp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvQuestion">
+                    <RadioButton
+                        android:id="@+id/rb42"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
 
-        <RadioGroup
-            android:id="@+id/rg8"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+                    <RadioButton
+                        android:id="@+id/rb43"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
 
-            <RadioButton
-                android:id="@+id/rb81"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                    <RadioButton
+                        android:id="@+id/rb44"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </RadioGroup>
+            </LinearLayout>
 
-            <RadioButton
-                android:id="@+id/rb82"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:id="@+id/lTexto"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingStart="30dp"
+                android:paddingTop="20dp"
+                android:paddingEnd="30dp"
+                android:paddingBottom="50dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvQuestion">
 
-            <RadioButton
-                android:id="@+id/rb83"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tiledResponse"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    app:counterMaxLength="300">
 
-            <RadioButton
-                android:id="@+id/rb84"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/tiedResponse"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="@string/tiedHintResponse"
+                        android:maxLength="300" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-            <RadioButton
-                android:id="@+id/rb85"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+            </LinearLayout>
 
-            <RadioButton
-                android:id="@+id/rb86"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:id="@+id/lName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingStart="30dp"
+                android:paddingTop="50dp"
+                android:paddingEnd="30dp"
+                android:paddingBottom="50dp"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvQuestion">
 
-            <RadioButton
-                android:id="@+id/rb87"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/tvNameIntegrante"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="30dp"
+                    android:text="@string/tvNamePicker"
+                    android:textAlignment="center"
+                    android:textSize="18sp" />
 
-            <RadioButton
-                android:id="@+id/rb88"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </RadioGroup>
-    </LinearLayout>
+                <Spinner
+                    android:id="@+id/spNameIntegrante"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="50dp"
+                    android:foregroundTint="@color/purple_500"
+                    android:minHeight="48dp" />
 
-    <Button
-        android:id="@+id/btnSubmit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="72dp"
-        android:layout_marginBottom="60dp"
-        android:text="@string/btnSubmit"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+                <Button
+                    android:id="@+id/btnStartEncuesta"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/btnEmpezarEncuesta" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lRadio8"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingStart="50dp"
+                android:paddingEnd="50dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvQuestion">
+
+                <RadioGroup
+                    android:id="@+id/rg8"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <RadioButton
+                        android:id="@+id/rb81"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <RadioButton
+                        android:id="@+id/rb82"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <RadioButton
+                        android:id="@+id/rb83"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <RadioButton
+                        android:id="@+id/rb84"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <RadioButton
+                        android:id="@+id/rb85"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <RadioButton
+                        android:id="@+id/rb86"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <RadioButton
+                        android:id="@+id/rb87"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <RadioButton
+                        android:id="@+id/rb88"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </RadioGroup>
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

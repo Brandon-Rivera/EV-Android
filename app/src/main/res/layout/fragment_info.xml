@@ -63,7 +63,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:tint="#AAED1A3B"
+                app:tint="@color/redDark"
                 app:tintMode="src_atop" />
 
             <TextView
@@ -115,7 +115,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:tint="#AAED1A3B"
+                app:tint="@color/redDark"
                 app:tintMode="src_atop" />
 
             <TextView
@@ -167,7 +167,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:tint="#AAED1A3B"
+                app:tint="@color/redDark"
                 app:tintMode="src_atop" />
 
             <TextView

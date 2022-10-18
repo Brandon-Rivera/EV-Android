@@ -22,7 +22,7 @@ class CustomAdapter(private val context: Context, private val layout: Int,
 
         init {
             imagen = itemView.findViewById(R.id.imgImagen) as ImageView
-            nombre = itemView.findViewById (R.id.txtNombre) as TextView
+            nombre = itemView.findViewById (R.id.txtNombreElemento) as TextView
             edad = itemView.findViewById(R.id.txtEdad) as TextView
 
         }

@@ -23,6 +23,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.view.children
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
@@ -31,9 +32,14 @@ import com.android.volley.Response
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
 import mx.tec.bamxmorelos.adapter.CustomAdapter
 import mx.tec.bamxmorelos.databinding.ActivityEncuestaBinding
 import mx.tec.bamxmorelos.model.Elemento
@@ -41,6 +47,9 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.sql.Date
 import java.time.LocalDateTime
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 import kotlin.properties.Delegates
 
 class Encuesta : AppCompatActivity(), LocationListener {
@@ -48,6 +57,8 @@ class Encuesta : AppCompatActivity(), LocationListener {
     lateinit var queue: RequestQueue
     lateinit var locationManager: LocationManager
     var res = JSONArray()
+    var lat = 0.0
+    var lon = 0.0
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,7 +69,14 @@ class Encuesta : AppCompatActivity(), LocationListener {
 
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
-
+        if (ActivityCompat.checkSelfPermission(this@Encuesta, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            locationManager.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER,
+                2000,
+                5f,
+                this@Encuesta
+            )
+        }
 
         queue = Volley.newRequestQueue(this@Encuesta)
 
@@ -143,13 +161,6 @@ class Encuesta : AppCompatActivity(), LocationListener {
         queue.add(requestFam)
 
 
-        val datoss = listOf("--Seleccionar --", "Mujer", "Hombre")
-
-
-
-
-
-
         binding.iBtnBack.setOnClickListener {
             val intent = Intent(this@Encuesta, LandingPage::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or
@@ -160,53 +171,50 @@ class Encuesta : AppCompatActivity(), LocationListener {
         //Cambiar de Inicio de Encuesta a primera pregunta
         binding.btnStartEncuesta.setOnClickListener {
 
-            fun sendLocation(location: Location) {
-                val body = JSONObject()
-                with(body) {
-                    put("idUser", sharedPreference.getString("idUser", "#"))
-                    put("placeName", "")
-                    put("lat", location.latitude)
-                    put("lon", location.longitude)
-                    put("street", "")
-                    put("extNum", "")
-                    put("intNum", "")
-                    put("suburb", "")
-                    put("postalCode", "")
-                    put("city", "")
-                    put("stateN", "")
-                }
 
-                val listenerUbi = Response.Listener<JSONObject> { response ->
-
-                    Toast.makeText(this@Encuesta, "Ubicacion registrada", Toast.LENGTH_SHORT).show()
-                    Log.e("RESPONSE", response.toString())
-                    val intent = Intent(this@Encuesta, LandingPage::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or
-                            Intent.FLAG_ACTIVITY_NEW_TASK
-                    startActivity(intent)
-                }
-
-                val errorUbi = Response.ErrorListener { error ->
-                    Log.e("ERROR", error.message!!)
-
-                    Toast.makeText(this@Encuesta, "Ubicacion no registrada", Toast.LENGTH_SHORT)
-                        .show()
-                }
-
-                val url = "http://api-vacaciones.us-east-1.elasticbeanstalk.com/api/slocation"
-                val requestUbi =
-                    object : JsonObjectRequest(Method.POST, url, body, listenerUbi, errorUbi) {
-                        override fun getHeaders(): MutableMap<String, String> {
-                            val hashMap = HashMap<String, String>()
-                            hashMap.put(
-                                "x-access-token",
-                                sharedPreference.getString("token", "#").toString()
-                            )
-                            return hashMap
-                        }
-                    }
-                queue.add(requestUbi)
+            val body = JSONObject()
+            with(body) {
+                put("idUser", sharedPreference.getString("idUser", "#"))
+                put("placeName", "")
+                put("lat", lat)
+                put("lon", lon)
+                put("street", "")
+                put("extNum", "")
+                put("intNum", "")
+                put("suburb", "")
+                put("postalCode", "")
+                put("city", "")
+                put("stateN", "")
             }
+
+            val listenerUbi = Response.Listener<JSONObject> { response ->
+
+                Toast.makeText(this@Encuesta, "Ubicación registrada", Toast.LENGTH_SHORT).show()
+                Log.e("RESPONSE", response.toString())
+
+            }
+
+            val errorUbi = Response.ErrorListener { error ->
+                Log.e("ERROR", error.message!!)
+
+                Toast.makeText(this@Encuesta, "Ubicacion no registrada", Toast.LENGTH_SHORT)
+                    .show()
+            }
+
+            val url = "http://api-vacaciones.us-east-1.elasticbeanstalk.com/api/slocation"
+            val requestUbi =
+                object : JsonObjectRequest(Method.POST, url, body, listenerUbi, errorUbi) {
+                    override fun getHeaders(): MutableMap<String, String> {
+                        val hashMap = HashMap<String, String>()
+                        hashMap.put(
+                            "x-access-token",
+                            sharedPreference.getString("token", "#").toString()
+                        )
+                        return hashMap
+                    }
+                }
+            queue.add(requestUbi)
+
 
             if (ActivityCompat.checkSelfPermission(
                     this@Encuesta,
@@ -230,7 +238,7 @@ class Encuesta : AppCompatActivity(), LocationListener {
 
         //Avanzar en preguntas de encuesta
         binding.btnSiguiente.setOnClickListener {
-            if (count + 1 < res.length()) {
+            if (count + 1 < res.length()+1) {
                 count += 1
                 saveSelection(count)
                 viewType(res.getJSONObject(count).getInt("questionType"))
@@ -275,18 +283,43 @@ class Encuesta : AppCompatActivity(), LocationListener {
             var idTemp =
                 (userId.toString() + timeAnswered.year.toString() + timeAnswered.monthValue.toString() + timeAnswered.dayOfMonth.toString()).toInt()
 
+
+            val urlSubmit =
+                "http://api-vacaciones.us-east-1.elasticbeanstalk.com/api/subquestionanswer"
+            val listenerSubmit = Response.Listener<JSONArray> { response ->
+                Log.e("RESPONSE", response.toString())
+                val mySnackbar = Snackbar.make(
+                    findViewById(mx.tec.bamxmorelos.R.id.clEncuesta),
+                    "Enviada exitosamente",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            }
+
+            val errorSubmit = Response.ErrorListener { error ->
+                Log.e("ERRORSubmit", error.message!!.toString())
+                val mySnackbar = Snackbar.make(
+                    findViewById(mx.tec.bamxmorelos.R.id.clEncuesta),
+                    "Envío fallido",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            }
+
+
             val urlUser =
                 "http://api-vacaciones.us-east-1.elasticbeanstalk.com/api/famMemberByIdUser/$userId"
+            println(urlUser)
             val listenerUser = Response.Listener<JSONArray> { response ->
+                println(response.toString())
                 var name = "Jane Doe"
                 for (i in 0 until response.length()) {
                     name = "${
                         response.getJSONObject(i).getString("names")
                     } ${response.getJSONObject(i).getString("lastNameD")}"
-
+                    println(name)
+                    println(count)
                     if (binding.tvNameEncuesta.text.toString() == name) {
 
-                        for (j in 1 until count) {
+                        for (j in 1 until count+2) {
                             val answer = JSONObject()
                             val opt = sharedPreference.getString(j.toString(), "#")
 
@@ -298,17 +331,41 @@ class Encuesta : AppCompatActivity(), LocationListener {
                             answer.put("idRow", 0)
                             answer.put("answer", opt)
 
+                            println(answer)
                             answers.put(answer)
 
                             //sharedPreference.edit().remove(i.toString()).apply()
                         }
-                        println(answers)
+                        println("en" + answers)
+
                     }
                 }
+
+                val requestSubmit =
+                    object : JsonArrayRequest(
+                        Method.POST,
+                        urlSubmit,
+                        answers,
+                        listenerSubmit,
+                        errorSubmit
+                    ) {
+                        override fun getHeaders(): MutableMap<String, String> {
+                            val hashMap = HashMap<String, String>()
+                            hashMap.put(
+                                "x-access-token",
+                                sharedPreference.getString("token", "#").toString()
+                            )
+                            return hashMap
+                        }
+                    }
+
+                queue.add(requestSubmit)
+
             }
 
             val errorUser = Response.ErrorListener { error ->
                 Log.e("ERRORUser", error.message!!)
+
             }
 
             val requestUser =
@@ -328,49 +385,8 @@ class Encuesta : AppCompatActivity(), LocationListener {
                         return hashMap
                     }
                 }
-
             queue.add(requestUser)
 
-            val urlSubmit =
-                "http://api-vacaciones.us-east-1.elasticbeanstalk.com/api/subquestionanswer"
-            val listenerSubmit = Response.Listener<JSONArray> { response ->
-                Log.e("RESPONSE", response.toString())
-                val mySnackbar = Snackbar.make(
-                    findViewById(mx.tec.bamxmorelos.R.id.clEncuesta),
-                    "Enviada exitosamente",
-                    Snackbar.LENGTH_SHORT
-                ).show()
-
-            }
-
-            val errorSubmit = Response.ErrorListener { error ->
-                Log.e("ERRORSubmit", error.message!!.toString())
-                val mySnackbar = Snackbar.make(
-                    findViewById(mx.tec.bamxmorelos.R.id.clEncuesta),
-                    "Envío fallido",
-                    Snackbar.LENGTH_SHORT
-                ).show()
-            }
-
-            val requestSubmit =
-                object : JsonArrayRequest(
-                    Method.POST,
-                    urlSubmit,
-                    answers,
-                    listenerSubmit,
-                    errorSubmit
-                ) {
-                    override fun getHeaders(): MutableMap<String, String> {
-                        val hashMap = HashMap<String, String>()
-                        hashMap.put(
-                            "x-access-token",
-                            sharedPreference.getString("token", "#").toString()
-                        )
-                        return hashMap
-                    }
-                }
-
-            queue.add(requestSubmit)
             /*
             val intent = Intent(this@Encuesta, LandingPage::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
@@ -570,6 +586,8 @@ class Encuesta : AppCompatActivity(), LocationListener {
     }
 
     override fun onLocationChanged(location: Location) {
-        TODO()
+        lat = location.latitude
+        lon = location.longitude
+
     }
 }

@@ -11,6 +11,10 @@
         android:id="@+id/cvElemento"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginBottom="4dp"
+        android:elevation="16dp"
+        app:cardCornerRadius="12dp"
         app:contentPadding="10dp">
 
         <LinearLayout
@@ -34,8 +38,8 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/txtNombre"
-                    android:layout_width="match_parent"
+                    android:id="@+id/txtNombreElemento"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingStart="20dp"
                     android:paddingEnd="20dp"
@@ -44,14 +48,31 @@
                     android:textAlignment="textStart"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
-                <TextView
-                    android:id="@+id/txtEdad"
+                <LinearLayout
+                    android:id="@+id/hllEdad"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:orientation="horizontal"
                     android:paddingStart="20dp"
-                    android:paddingEnd="20dp"
-                    android:text="@string/txtEdad"
-                    android:textAlignment="textStart" />
+                    android:paddingEnd="20dp">
+
+                    <TextView
+                        android:id="@+id/txtEdad"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="8dp"
+                        android:text="@string/txtEdad"
+                        android:textAlignment="textStart" />
+
+                    <TextView
+                        android:id="@+id/txtYearsElemento"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/txtEdadElemento" />
+
+                </LinearLayout>
+
             </LinearLayout>
 
         </LinearLayout>

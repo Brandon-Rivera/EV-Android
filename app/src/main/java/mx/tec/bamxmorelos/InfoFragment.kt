@@ -2,6 +2,7 @@ package mx.tec.bamxmorelos
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -46,13 +47,25 @@ class InfoFragment : Fragment(){
 
         contacto.setOnClickListener {
 
-            var builder = AlertDialog.Builder(context)
-            builder.setTitle("Contacto")
+            //var builder = AlertDialog.Builder(context)
+            /*builder.setTitle("Contacto")
                 .setMessage("Telefono : 777 317 5516\nDirección: Eugenio J Cañas 11, Acacias y Priv. Compo, Lomas de, La Pradera, 62175 Cuernavaca, Mor.")
                 .setNegativeButton("Cerrar") { dialog, _ ->
                     dialog.dismiss()
                 }
-                .show()
+                .show() */
+
+            //MessageDialog.display(context, R.layout.layout_contacto)
+
+            val myDialog = Dialog(requireContext())
+            myDialog.setContentView(R.layout.layout_contacto)
+            myDialog.setCancelable(true)
+            myDialog.show()
+            val button = myDialog.findViewById<Button>(R.id.btnCerrarContacto)
+            button.setOnClickListener {
+                myDialog.dismiss()
+            }
+
         }
 
         sugerencias.setOnClickListener {
