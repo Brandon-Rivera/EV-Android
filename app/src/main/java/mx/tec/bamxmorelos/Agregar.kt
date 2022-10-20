@@ -10,12 +10,15 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.view.isVisible
+import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.Response
+import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.google.android.material.snackbar.Snackbar
 import mx.tec.bamxmorelos.databinding.ActivityAgregarBinding
+import org.json.JSONArray
 import org.json.JSONObject
 import java.sql.Date
 
@@ -30,6 +33,8 @@ class Agregar : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         setContentView(binding.root)
         supportActionBar?.hide()
         this.requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        queue = Volley.newRequestQueue(this@Agregar)
+        val sharedPreference = getSharedPreferences("profile", Context.MODE_PRIVATE)
 
         val datos = listOf("No especificado", "Mujer", "Hombre")
         pregnancyFocusListener()
@@ -44,15 +49,10 @@ class Agregar : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
         binding.spSexoAgregar.adapter = adaptador
 
-        val url = "http://api-vacaciones.us-east-1.elasticbeanstalk.com/api/famMember"
-
-        queue = Volley.newRequestQueue(this@Agregar)
-
         binding.edtDate.setOnClickListener {
             showDatePickerDialog()
         }
 
-        val sharedPreference = getSharedPreferences("profile", Context.MODE_PRIVATE)
 
         binding.iBtnBackAgregar.setOnClickListener{
             val intent = Intent(this@Agregar, LandingPage::class.java)
@@ -61,10 +61,12 @@ class Agregar : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         }
 
         binding.btnAgregar.setOnClickListener{
+            LoadingDialog.display(this@Agregar)
             val body = JSONObject()
             val isPregnant = binding.cbPregnantAgregar.isChecked.compareTo(false)
             val isLeader = binding.cbLiderAgregar.isChecked.compareTo(false)
             val sexo = binding.spSexoAgregar.selectedItemId
+            val bodyDisease = JSONArray()
 
 
 
@@ -77,14 +79,18 @@ class Agregar : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 put("sex", sexo)
                 put("birthDate", binding.edtDate.text.toString())
                 put("weightV", binding.edtPesoAgregar.text.toString().toFloat())
-                put("height", binding.edtPesoAgregar.text.toString().toFloat())
+                put("height", binding.edtAlturaAgregar.text.toString().toFloat())
                 put("isPregnant", isPregnant)
+
             }
+            println("Body General")
             println(body)
 
-            val listener = Response.Listener<JSONObject> { response ->
+            val urlDisease = "http://api-vacaciones.us-east-1.elasticbeanstalk.com/api/disease"
+            val listenerDisease = Response.Listener<JSONArray> { response ->
 
-                Toast.makeText(this@Agregar, "Agregado Exitosamente", Toast.LENGTH_SHORT).show()
+                LoadingDialog.dismiss()
+                Toast.makeText(this@Agregar, "Agregado Exitosamente", Toast.LENGTH_SHORT).show() //verificar
 
                 Log.e("RESPONSE", response.toString())
                 val intent = Intent(this@Agregar, LandingPage::class.java)
@@ -92,15 +98,78 @@ class Agregar : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 startActivity(intent)
             }
 
-            val error = Response.ErrorListener { error ->
-                Log.e("ERROR", error.message!!)
-
+            val errorDisease = Response.ErrorListener { error ->
+                Log.e("ERRORDisease", error.message!!)
+                LoadingDialog.dismiss()
                 //Toast.makeText(this@Agregar, "No se agregó", Toast.LENGTH_SHORT).show()
                 val mySnackbar = Snackbar.make(
                     findViewById(R.id.clAgregar),
                     "No se pudo agregar miembro",
                     Snackbar.LENGTH_SHORT
                 ).show()
+            }
+
+
+            val userId = sharedPreference.getString("idUser", "#")
+            val urlUser = "http://api-vacaciones.us-east-1.elasticbeanstalk.com/api/famMemberByIdUser/$userId"
+            val listenerUser = Response.Listener<JSONArray> { response ->
+                val idFamMember = response.getJSONObject(response.length()-1).getString("id")
+
+                if (binding.cbDiabetes.isChecked){
+                    val dis = JSONObject()
+                    dis.put(idFamMember, 1)
+                    bodyDisease.put(dis)
+                }
+
+                if (binding.cbHipertension.isChecked){
+                    val dis = JSONObject()
+                    dis.put(idFamMember, 2)
+                    bodyDisease.put(dis)
+                }
+                if (binding.cbObesidad.isChecked){
+                    val dis = JSONObject()
+                    dis.put(idFamMember, 3)
+                    bodyDisease.put(dis)
+                }
+
+                Log.e("Body Disease", bodyDisease.toString())
+
+                val requestDisease = object: JsonArrayRequest(Method.POST, urlDisease, bodyDisease, listenerDisease, errorDisease){
+                    override fun getHeaders(): MutableMap<String, String> {
+                        val hashMap = HashMap<String, String>()
+                        hashMap.put("x-access-token", sharedPreference.getString("token", "#").toString())
+                        return hashMap
+                    }
+                }
+                queue.add(requestDisease)
+            }
+
+            val errorUser = Response.ErrorListener { error ->
+                Log.e("ERROR", error.message!!)
+            }
+
+
+            val url = "http://api-vacaciones.us-east-1.elasticbeanstalk.com/api/famMember"
+            val listener = Response.Listener<JSONObject> { response ->
+
+                val requestUser =
+                    object : JsonArrayRequest(Request.Method.GET, urlUser, null, listenerUser, errorUser) {
+                        override fun getHeaders(): MutableMap<String, String> {
+                            val hashMap = HashMap<String, String>()
+                            hashMap.put(
+                                "x-access-token",
+                                sharedPreference.getString("token", "#").toString()
+                            )
+                            return hashMap
+                        }
+                    }
+
+                queue.add(requestUser)
+
+            }
+
+            val error = Response.ErrorListener { error ->
+                Log.e("ERROR", error.message!!)
             }
 
             val request = object: JsonObjectRequest(Method.POST, url, body, listener, error){

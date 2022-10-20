@@ -16,13 +16,11 @@ import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonArrayRequest
-import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import mx.tec.bamxmorelos.adapter.CustomAdapter
 import mx.tec.bamxmorelos.model.Elemento
 import org.json.JSONArray
-import java.sql.Date
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -51,6 +49,7 @@ class FamilyFragment : Fragment(R.layout.fragment_family){
 
             var datos = mutableListOf<Elemento>()
             for (i in 0 until response.length()) {
+                if (response.getJSONObject(i).getString("isActive") == "T"){
                 val date = response.getJSONObject(i).getString("birthDate").subSequence(0, response.getJSONObject(i).getString("birthDate").length-1)
                 println(date)
                 val dob = LocalDateTime.parse(date)
@@ -66,6 +65,7 @@ class FamilyFragment : Fragment(R.layout.fragment_family){
                         R.mipmap.ic_launcher_logo_round
                     )
                 )
+                }
             }
 
             val rcView = view.findViewById<RecyclerView>(R.id.rcvMiembrosFamilia)
@@ -108,4 +108,3 @@ class FamilyFragment : Fragment(R.layout.fragment_family){
             return view
     }
 }
-

@@ -90,6 +90,12 @@
     <string name="telBamxPrimario">777 102 1334</string>
     <string name="direccionBamxCuernavaca">Eugenio J. Cañas #11, entre Acacias y Priv. Compostela, Lomas de la Pradera en Cuernavaca, Morelos. C.P. 62175</string>
     <string name="centroCva">Cuernavaca</string>
+    <string name="btnEditarMiembro">Editar Miembro</string>
+    <string name="btnConfirmarEdit">Confirmar Cambios</string>
+    <string name="btnEliminarEditar">Eliminar</string>
+    <string name="diseaseDiabetes">Diabetes</string>
+    <string name="diseaseObesidad">Obesidad</string>
+    <string name="diseaseHipertension">Hipertensión arterial</string>
 
 
 </resources>

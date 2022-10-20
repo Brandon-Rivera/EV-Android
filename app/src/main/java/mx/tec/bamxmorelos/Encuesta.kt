@@ -1,7 +1,6 @@
 package mx.tec.bamxmorelos
 
 import android.Manifest
-import android.R
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -12,45 +11,23 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.view.View.*
 import android.widget.ArrayAdapter
 import android.widget.RadioButton
-import android.widget.RadioGroup
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
-import androidx.core.view.children
 import androidx.core.view.isVisible
-import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
-import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.textfield.TextInputEditText
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlinx.coroutines.withContext
-import mx.tec.bamxmorelos.adapter.CustomAdapter
 import mx.tec.bamxmorelos.databinding.ActivityEncuestaBinding
-import mx.tec.bamxmorelos.model.Elemento
 import org.json.JSONArray
 import org.json.JSONObject
-import java.sql.Date
 import java.time.LocalDateTime
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
-import kotlin.properties.Delegates
 
 class Encuesta : AppCompatActivity(), LocationListener {
     lateinit var binding: ActivityEncuestaBinding
@@ -98,7 +75,6 @@ class Encuesta : AppCompatActivity(), LocationListener {
         val listener = Response.Listener<JSONArray> { response ->
             res = response
             Log.e("RESPONSE", response.toString())
-
         }
 
         val error = Response.ErrorListener { error ->
@@ -113,7 +89,7 @@ class Encuesta : AppCompatActivity(), LocationListener {
                         "x-access-token",
                         sharedPreference.getString("token", "#").toString()
                     )
-                    println(sharedPreference.getString("token", "#").toString())
+                    //println(sharedPreference.getString("token", "#").toString())
                     return hashMap
                 }
             }
@@ -127,11 +103,13 @@ class Encuesta : AppCompatActivity(), LocationListener {
 
         val listenerFam = Response.Listener<JSONArray> { response ->
             for (i in 0 until response.length()) {
-                datos.add(
-                    "${response.getJSONObject(i).getString("names")} ${
-                        response.getJSONObject(i).getString("lastNameD")
-                    }"
-                )
+                if (response.getJSONObject(i).getString("isActive") == "T") {
+                    datos.add(
+                        "${response.getJSONObject(i).getString("names")} ${
+                            response.getJSONObject(i).getString("lastNameD")
+                        }"
+                    )
+                }
             }
             val adaptador = ArrayAdapter<String>(
                 this@Encuesta,
@@ -171,7 +149,7 @@ class Encuesta : AppCompatActivity(), LocationListener {
         //Cambiar de Inicio de Encuesta a primera pregunta
         binding.btnStartEncuesta.setOnClickListener {
 
-
+            saveSelection(count)
             val body = JSONObject()
             with(body) {
                 put("idUser", sharedPreference.getString("idUser", "#"))
@@ -238,13 +216,14 @@ class Encuesta : AppCompatActivity(), LocationListener {
 
         //Avanzar en preguntas de encuesta
         binding.btnSiguiente.setOnClickListener {
-            if (count + 1 < res.length()+1) {
-                count += 1
+            if (count + 1 < res.length()) {
                 saveSelection(count)
+                count += 1
                 viewType(res.getJSONObject(count).getInt("questionType"))
                 onIdChanged(count)
             }
-            if (count + 1 == 2) { //<-- Regresar a res.length()
+
+            if (count + 1 == 35) { //<-- Regresar a res.length()
                 binding.btnSiguiente.visibility = INVISIBLE
                 binding.btnSubmit.visibility = VISIBLE
 
@@ -252,8 +231,6 @@ class Encuesta : AppCompatActivity(), LocationListener {
                 binding.btnSiguiente.visibility = VISIBLE
                 binding.btnSubmit.visibility = GONE
             }
-
-
         }
 
         //Regresar en preguntas de encuesta
@@ -276,6 +253,7 @@ class Encuesta : AppCompatActivity(), LocationListener {
         }
 
         binding.btnSubmit.setOnClickListener {
+            println("Submiting " + count.toString())
             saveSelection(count)
             val answers = JSONArray()
             val timeAnswered = LocalDateTime.now()
@@ -307,7 +285,7 @@ class Encuesta : AppCompatActivity(), LocationListener {
 
             val urlUser =
                 "http://api-vacaciones.us-east-1.elasticbeanstalk.com/api/famMemberByIdUser/$userId"
-            println(urlUser)
+            //println(urlUser)
             val listenerUser = Response.Listener<JSONArray> { response ->
                 println(response.toString())
                 var name = "Jane Doe"
@@ -387,11 +365,6 @@ class Encuesta : AppCompatActivity(), LocationListener {
                 }
             queue.add(requestUser)
 
-            /*
-            val intent = Intent(this@Encuesta, LandingPage::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-            startActivity(intent)*/
-
         }
     }
 
@@ -428,6 +401,7 @@ class Encuesta : AppCompatActivity(), LocationListener {
 
         } else if (binding.lTexto.isVisible) {
             val answer = binding.tiedResponse.text.toString()
+            sharedPreference.edit().putString(count.toString(), answer).apply()
             //Log.e("ANSWER", answer)
             binding.tiedResponse.text?.clear()
         }
@@ -438,11 +412,11 @@ class Encuesta : AppCompatActivity(), LocationListener {
 
         val options = mutableListOf<String>()
         val sharedPreference = getSharedPreferences("profile", Context.MODE_PRIVATE)
-        println(sharedPreference.all)
+        //println(sharedPreference.all)
         val idQ = res.getJSONObject(count).getString("qOptions")
         val urlOptions =
             "http://api-vacaciones.us-east-1.elasticbeanstalk.com/api/questionsoptionsByQuesId/$idQ"
-        println(urlOptions)
+        //println(urlOptions)
 
         val listener = Response.Listener<JSONArray> { response ->
             println(response)
@@ -532,14 +506,16 @@ class Encuesta : AppCompatActivity(), LocationListener {
                 binding.lRadio6.visibility = GONE
                 binding.lRadio8.visibility = GONE
                 binding.lName.visibility = GONE
+                binding.lDisease.visibility = GONE
             }
             2 -> {
-                binding.lTexto.visibility = VISIBLE
+                binding.lTexto.visibility = GONE
                 binding.lRadio4.visibility = GONE
                 binding.lRadio5.visibility = GONE
                 binding.lRadio6.visibility = GONE
                 binding.lRadio8.visibility = GONE
                 binding.lName.visibility = GONE
+                binding.lDisease.visibility = VISIBLE
             }
             3 -> {
                 binding.lTexto.visibility = GONE
@@ -548,6 +524,7 @@ class Encuesta : AppCompatActivity(), LocationListener {
                 binding.lRadio6.visibility = GONE
                 binding.lRadio8.visibility = GONE
                 binding.lName.visibility = GONE
+                binding.lDisease.visibility = GONE
             }
             4 -> {
                 binding.lTexto.visibility = GONE
@@ -556,6 +533,7 @@ class Encuesta : AppCompatActivity(), LocationListener {
                 binding.lRadio6.visibility = GONE
                 binding.lRadio8.visibility = GONE
                 binding.lName.visibility = GONE
+                binding.lDisease.visibility = GONE
             }
             5 -> {
                 binding.lTexto.visibility = GONE
@@ -564,6 +542,7 @@ class Encuesta : AppCompatActivity(), LocationListener {
                 binding.lRadio6.visibility = VISIBLE
                 binding.lRadio8.visibility = GONE
                 binding.lName.visibility = GONE
+                binding.lDisease.visibility = GONE
             }
             6 -> {
                 binding.lTexto.visibility = GONE
@@ -572,6 +551,16 @@ class Encuesta : AppCompatActivity(), LocationListener {
                 binding.lRadio6.visibility = GONE
                 binding.lRadio8.visibility = VISIBLE
                 binding.lName.visibility = GONE
+                binding.lDisease.visibility = GONE
+            }
+            8 -> {
+                binding.lTexto.visibility = GONE
+                binding.lRadio4.visibility = GONE
+                binding.lRadio5.visibility = GONE
+                binding.lRadio6.visibility = GONE
+                binding.lRadio8.visibility = GONE
+                binding.lName.visibility = GONE
+                binding.lDisease.visibility = VISIBLE
             }
 
             else -> {
@@ -581,6 +570,7 @@ class Encuesta : AppCompatActivity(), LocationListener {
                 binding.lRadio6.visibility = GONE
                 binding.lRadio8.visibility = GONE
                 binding.lName.visibility = GONE
+                binding.lDisease.visibility = GONE
             }
         }
     }
@@ -588,6 +578,5 @@ class Encuesta : AppCompatActivity(), LocationListener {
     override fun onLocationChanged(location: Location) {
         lat = location.latitude
         lon = location.longitude
-
     }
 }
