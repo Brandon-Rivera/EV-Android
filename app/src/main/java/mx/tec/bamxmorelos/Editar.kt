@@ -44,6 +44,8 @@ class Editar : AppCompatActivity() {
         pregnancyFocusListener()
 
 
+        var diseases = JSONArray()
+
         //1. contexto 2. layout 3. datos
         val adaptador = ArrayAdapter<String>(
             this@Editar,
@@ -77,6 +79,7 @@ class Editar : AppCompatActivity() {
                     binding.cbObesidadEditar.isChecked = true
                 }
             }
+            diseases = response
         }
 
         val errorDiseaseM = Response.ErrorListener { error ->
@@ -235,13 +238,13 @@ class Editar : AppCompatActivity() {
         }
 
         binding.btnConfirmarEditar.setOnClickListener{
-           /* LoadingDialog.display(this@Editar)
+            /*
+            LoadingDialog.display(this@Editar)
             val body = JSONObject()
+            val diseases = JSONArray()
             val isPregnant = binding.cbPregnantEditar.isChecked.compareTo(false)
             val isLeader = binding.cbLiderEditar.isChecked.compareTo(false)
             val sexo = binding.spSexoEditar.selectedItemId
-
-
 
             with(body){
                 put("id", idFamMember)
@@ -288,11 +291,9 @@ class Editar : AppCompatActivity() {
                     return hashMap
                 }
             }
-            queue.add(request) */
+            queue.add(request)
 
-
-
-
+            */
 
             LoadingDialog.display(this@Editar)
             val body = JSONObject()
@@ -348,20 +349,20 @@ class Editar : AppCompatActivity() {
             val listenerUser = Response.Listener<JSONArray> { response ->
                 val idFamMember = response.getJSONObject(response.length()-1).getString("id")
 
-                if (binding.cbDiabetesEditar.isChecked){
+                if (!binding.cbDiabetesEditar.isChecked){
                     val dis = JSONObject()
                     dis.put("idMember", idFamMember)
                     dis.put("idDisease", 1)
                     bodyDisease.put(dis)
                 }
 
-                if (binding.cbHipertensionEditar.isChecked){
+                if (!binding.cbHipertensionEditar.isChecked){
                     val dis = JSONObject()
                     dis.put("idMember", idFamMember)
                     dis.put("idDisease", 2)
                     bodyDisease.put(dis)
                 }
-                if (binding.cbObesidadEditar.isChecked){
+                if (!binding.cbObesidadEditar.isChecked){
                     val dis = JSONObject()
                     dis.put("idMember", idFamMember)
                     dis.put("idDisease", 3)
@@ -369,8 +370,19 @@ class Editar : AppCompatActivity() {
                 }
 
                 Log.e("Body Disease", bodyDisease.toString())
+                val bDisease = JSONArray()
+                for (i in 0 until diseases.length()){
+                    for (j in 0 until bodyDisease.length()) {
+                        if (diseases.getJSONObject(i).getInt("idDisease") == bodyDisease.getJSONObject(j).getInt("idDisease")){
+                            val dis = JSONObject()
+                            dis.put("idMember", idFamMember)
+                            dis.put("idDisease", bodyDisease.getJSONObject(j).getInt("idDisease"))
+                            bDisease.put(dis)
+                        }
+                    }
+                }
 
-                val requestDisease = object: JsonArrayRequest(Method.PUT, urlDisease, bodyDisease, listenerDisease, errorDisease){
+                val requestDisease = object: JsonArrayRequest(Method.DELETE, urlDisease, bDisease, listenerDisease, errorDisease){
                     override fun getHeaders(): MutableMap<String, String> {
                         val hashMap = HashMap<String, String>()
                         hashMap.put("x-access-token", sharedPreference.getString("token", "#").toString())
