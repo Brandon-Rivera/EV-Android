@@ -19,8 +19,18 @@ class LandingFragment : Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        var mediaController: MediaController? = null
         val view = layoutInflater.inflate(R.layout.fragment_landing, container, false)
+
+        val videoView = view.findViewById<VideoView>(R.id.vVideo)
+        var mediaController = MediaController(context)
+        mediaController.setAnchorView(videoView)
+
+        var uri = Uri.parse("https://bamx.org.mx/wp-content/uploads/2022/08/comprimido.mp4?_=1")
+
+        videoView.setMediaController(mediaController)
+        videoView.setVideoURI(uri)
+        videoView.requestFocus()
+        videoView.start()
 
 
         return view

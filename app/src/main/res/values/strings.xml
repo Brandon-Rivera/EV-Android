@@ -96,6 +96,14 @@
     <string name="diseaseDiabetes">Diabetes</string>
     <string name="diseaseObesidad">Obesidad</string>
     <string name="diseaseHipertension">Hipertensión arterial</string>
+    <string name="inicioMenu">Inicio</string>
+    <string name="familiaMenu">Familia</string>
+    <string name="menuMenu">Menú</string>
+    <string name="recDiabetes">*Evitar la adición de azúcares en la dieta habitual \n*Llevar un monitoreo constante para llevar un mejor control \n*Evitar llevar una vida sendentaria, realizando como mínimo 45 minutos de ejercicio al día 3 veces a la semana \n*Aumentar el consumo de alimentos de origen vegetal \n*Dimisnuir el consumo de bebidas azucaradas \n*Realizar ejercicio de manera constante</string>
+    <string name="recHipertension">*Reducir el consumo de sodio (sal) \n*Evitar preparar sus alimentos fritos y capeados y preferir alimentos asados o en horno \n*Evitar el consumo de grasas trans \n*Llevar un monitoreo constante para llevar un mejor control \n*Evitar llevar una vida sendentaria, realizando como mínimo 45 minutos de ejercicio al día 3 veces a la semana \n*Preferir alimentos poco procesados/frescos \n*Realizar ejercicio de manera constante</string>
+    <string name="recObesidad">*Evitar la adición de azúcares en la dieta habitual \n*Evitar preparar sus alimentos fritos y capeados y preferir alimentos asados o en horno \n*Evitar el consumo de grasas trans \n*Llevar un monitoreo constante para llevar un mejor control \n*Evitar llevar una vida sendentaria, realizando como mínimo 45 minutos de ejercicio al día 3 veces a la semana \n*Aumentar el consumo de alimentos de origen vegetal \n*Dimisnuir el consumo de bebidas azucaradas \n *Aumentar la ingesta de alimentos integrales y ricos en fibra *Preferir alimentos poco procesados/frescos *Realizar ejercicio de manera constante</string>
+    <string name="recGenerales">Generales</string>
+    <string name="recGeneralesLista">*Llevar una dieta variada y equilibrada \n*Disminuir el consumo de ácidos grasos saturados y preferir el consumo de acidos grasos mono y poliinsaturados \n*Llevar una alimentación que cubra las necesidades de cada integrante de la familia \n*Realizar ejercicio físico mínimo 30 minutos al día, combinando ejercicios aeróbicos y anaeróbicos \n*Tomar mínimo 2 litros de agua simple al día para evitar una deshidratación</string>
 
 
 </resources>

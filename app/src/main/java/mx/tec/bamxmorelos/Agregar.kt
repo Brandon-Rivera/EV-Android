@@ -86,7 +86,7 @@ class Agregar : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             println("Body General")
             println(body)
 
-            val urlDisease = "http://api-vacaciones.us-east-1.elasticbeanstalk.com/api/disease"
+            val urlDisease = "http://api-vacaciones.us-east-1.elasticbeanstalk.com/api/memberdiseasedos"
             val listenerDisease = Response.Listener<JSONArray> { response ->
 
                 LoadingDialog.dismiss()
@@ -117,18 +117,21 @@ class Agregar : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
                 if (binding.cbDiabetes.isChecked){
                     val dis = JSONObject()
-                    dis.put(idFamMember, 1)
+                    dis.put("idMember", idFamMember)
+                    dis.put("idDisease", 1)
                     bodyDisease.put(dis)
                 }
 
                 if (binding.cbHipertension.isChecked){
                     val dis = JSONObject()
-                    dis.put(idFamMember, 2)
+                    dis.put("idMember", idFamMember)
+                    dis.put("idDisease", 2)
                     bodyDisease.put(dis)
                 }
                 if (binding.cbObesidad.isChecked){
                     val dis = JSONObject()
-                    dis.put(idFamMember, 3)
+                    dis.put("idMember", idFamMember)
+                    dis.put("idDisease", 3)
                     bodyDisease.put(dis)
                 }
 

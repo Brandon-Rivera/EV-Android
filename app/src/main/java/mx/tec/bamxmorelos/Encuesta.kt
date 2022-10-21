@@ -46,14 +46,6 @@ class Encuesta : AppCompatActivity(), LocationListener {
 
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
-        if (ActivityCompat.checkSelfPermission(this@Encuesta, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            locationManager.requestLocationUpdates(
-                LocationManager.GPS_PROVIDER,
-                2000,
-                5f,
-                this@Encuesta
-            )
-        }
 
         queue = Volley.newRequestQueue(this@Encuesta)
 
@@ -72,6 +64,7 @@ class Encuesta : AppCompatActivity(), LocationListener {
 
         val url = "http://api-vacaciones.us-east-1.elasticbeanstalk.com/api/questions"
 
+        //Get de preguntas de encuesta
         val listener = Response.Listener<JSONArray> { response ->
             res = response
             Log.e("RESPONSE", response.toString())
@@ -101,6 +94,8 @@ class Encuesta : AppCompatActivity(), LocationListener {
         val urlFam =
             "http://api-vacaciones.us-east-1.elasticbeanstalk.com/api/famMemberByIdUser/$idUser"
 
+        //Get de famMembers por id
+        //generar la lista para el spinner de miembros
         val listenerFam = Response.Listener<JSONArray> { response ->
             for (i in 0 until response.length()) {
                 if (response.getJSONObject(i).getString("isActive") == "T") {
@@ -138,74 +133,80 @@ class Encuesta : AppCompatActivity(), LocationListener {
             }
         queue.add(requestFam)
 
-
-        binding.iBtnBack.setOnClickListener {
+        binding.btnBackEncuesta.setOnClickListener {
             val intent = Intent(this@Encuesta, LandingPage::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or
                     Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(intent)
 
         }
+
         //Cambiar de Inicio de Encuesta a primera pregunta
+        //post de ubicacion de inicio encuesta
         binding.btnStartEncuesta.setOnClickListener {
-
-            saveSelection(count)
-            val body = JSONObject()
-            with(body) {
-                put("idUser", sharedPreference.getString("idUser", "#"))
-                put("placeName", "")
-                put("lat", lat)
-                put("lon", lon)
-                put("street", "")
-                put("extNum", "")
-                put("intNum", "")
-                put("suburb", "")
-                put("postalCode", "")
-                put("city", "")
-                put("stateN", "")
-            }
-
-            val listenerUbi = Response.Listener<JSONObject> { response ->
-
-                Toast.makeText(this@Encuesta, "Ubicación registrada", Toast.LENGTH_SHORT).show()
-                Log.e("RESPONSE", response.toString())
-
-            }
-
-            val errorUbi = Response.ErrorListener { error ->
-                Log.e("ERROR", error.message!!)
-
-                Toast.makeText(this@Encuesta, "Ubicacion no registrada", Toast.LENGTH_SHORT)
-                    .show()
-            }
-
-            val url = "http://api-vacaciones.us-east-1.elasticbeanstalk.com/api/slocation"
-            val requestUbi =
-                object : JsonObjectRequest(Method.POST, url, body, listenerUbi, errorUbi) {
-                    override fun getHeaders(): MutableMap<String, String> {
-                        val hashMap = HashMap<String, String>()
-                        hashMap.put(
-                            "x-access-token",
-                            sharedPreference.getString("token", "#").toString()
-                        )
-                        return hashMap
-                    }
-                }
-            queue.add(requestUbi)
-
 
             if (ActivityCompat.checkSelfPermission(
                     this@Encuesta,
                     Manifest.permission.ACCESS_FINE_LOCATION
                 ) == PackageManager.PERMISSION_GRANTED
             ) {
-                binding.lName.visibility = GONE
+                //saveSelection(count)
+
+                val body = JSONObject()
+                with(body) {
+                    put("idUser", sharedPreference.getString("idUser", "#")?.toInt())
+                    put("placeName", "")
+                    put("lat", lat.toFloat())
+                    put("lon", lon.toFloat())
+                    put("street", "")
+                    put("extNum", "")
+                    put("intNum", "")
+                    put("suburb", "")
+                    put("postalCode", "")
+                    put("city", "")
+                    put("stateN", "")
+                }
+
+                print("Ubicacion ")
+                println(body)
+
+                val listenerUbi = Response.Listener<JSONObject> { response ->
+
+                    Toast.makeText(this@Encuesta, "Ubicación registrada", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(this@Encuesta, response.toString(), Toast.LENGTH_SHORT).show()
+                    Log.e("RESPONSE", response.toString())
+
+                }
+
+                val errorUbi = Response.ErrorListener { error ->
+                    Log.e("ERROR", error.message!!)
+
+                    Toast.makeText(this@Encuesta, "Ubicacion no registrada",
+                        Toast.LENGTH_SHORT).show()
+                }
+
+                //post ubicacion de usuario
+                val url = "http://api-vacaciones.us-east-1.elasticbeanstalk.com/api/slocation"
+                val requestUbi =
+                    object : JsonObjectRequest(Method.POST, url, body, listenerUbi, errorUbi) {
+                        override fun getHeaders(): MutableMap<String, String> {
+                            val hashMap = HashMap<String, String>()
+                            hashMap.put(
+                                "x-access-token",
+                                sharedPreference.getString("token", "#").toString()
+                            )
+                            return hashMap
+                        }
+                    }
+
+                //binding.lName.visibility = GONE
                 binding.btnSiguiente.visibility = VISIBLE
                 binding.btnAnterior.visibility = VISIBLE
                 binding.tvId.visibility = VISIBLE
                 binding.tvQuestion.visibility = VISIBLE
                 binding.tvNameEncuesta.visibility = VISIBLE
                 binding.tvNameEncuesta.text = binding.spNameIntegrante.selectedItem.toString()
+                queue.add(requestUbi)
                 viewType(res.getJSONObject(count).getInt("questionType"))
                 onIdChanged(count)
 
@@ -216,45 +217,41 @@ class Encuesta : AppCompatActivity(), LocationListener {
 
         //Avanzar en preguntas de encuesta
         binding.btnSiguiente.setOnClickListener {
-            if (count + 1 < res.length()) {
+
+            if (count + 1 < res.length()) { // <-- regresar a res.lenght()
                 saveSelection(count)
                 count += 1
+
+                //verificar si es fin de encuesta para submit
+                if (count + 1 == 34) { // <-- regresar a res.length()
+                    binding.btnSiguiente.visibility = INVISIBLE
+                    binding.btnSubmit.visibility = VISIBLE
+                } else {
+                    binding.btnSiguiente.visibility = VISIBLE
+                    binding.btnSubmit.visibility = GONE
+                }
+
                 viewType(res.getJSONObject(count).getInt("questionType"))
                 onIdChanged(count)
-            }
-
-            if (count + 1 == 35) { //<-- Regresar a res.length()
-                binding.btnSiguiente.visibility = INVISIBLE
-                binding.btnSubmit.visibility = VISIBLE
-
-            } else {
-                binding.btnSiguiente.visibility = VISIBLE
-                binding.btnSubmit.visibility = GONE
             }
         }
 
         //Regresar en preguntas de encuesta
         binding.btnAnterior.setOnClickListener {
-            if (count - 1 >= 0) {
-                count -= 1
+
+            if (count - 1 > 0) {
                 saveSelection(count)
+                count -= 1
+
                 viewType(res.getJSONObject(count).getInt("questionType"))
                 onIdChanged(count)
-
-                if (count + 1 == res.length()) {
-                    binding.btnSiguiente.visibility = INVISIBLE
-                    binding.btnSubmit.visibility = VISIBLE
-
-                } else {
-                    binding.btnSiguiente.visibility = VISIBLE
-                    binding.btnSubmit.visibility = GONE
-                }
             }
         }
 
         binding.btnSubmit.setOnClickListener {
-            println("Submiting " + count.toString())
             saveSelection(count)
+            println("Submiting " + count.toString())
+
             val answers = JSONArray()
             val timeAnswered = LocalDateTime.now()
             val userId = sharedPreference.getString("idUser", "#")?.toInt()
@@ -266,11 +263,23 @@ class Encuesta : AppCompatActivity(), LocationListener {
                 "http://api-vacaciones.us-east-1.elasticbeanstalk.com/api/subquestionanswer"
             val listenerSubmit = Response.Listener<JSONArray> { response ->
                 Log.e("RESPONSE", response.toString())
-                val mySnackbar = Snackbar.make(
+                /*val mySnackbar = Snackbar.make(
                     findViewById(mx.tec.bamxmorelos.R.id.clEncuesta),
                     "Enviada exitosamente",
                     Snackbar.LENGTH_SHORT
-                ).show()
+                ).show() */
+                Toast.makeText(this@Encuesta, "Enviada exitosamente", Toast.LENGTH_SHORT).show()
+
+                for (i in 0 until res.length()) {
+                    with(sharedPreference.edit()) {
+                        remove(i.toString())
+                        apply()
+                    }
+                }
+
+                val intent = Intent(this@Encuesta, LandingPage::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                startActivity(intent)
             }
 
             val errorSubmit = Response.ErrorListener { error ->
@@ -287,6 +296,7 @@ class Encuesta : AppCompatActivity(), LocationListener {
                 "http://api-vacaciones.us-east-1.elasticbeanstalk.com/api/famMemberByIdUser/$userId"
             //println(urlUser)
             val listenerUser = Response.Listener<JSONArray> { response ->
+                println("users List")
                 println(response.toString())
                 var name = "Jane Doe"
                 for (i in 0 until response.length()) {
@@ -297,7 +307,7 @@ class Encuesta : AppCompatActivity(), LocationListener {
                     println(count)
                     if (binding.tvNameEncuesta.text.toString() == name) {
 
-                        for (j in 1 until count+2) {
+                        for (j in 1 until count + 2) {
                             val answer = JSONObject()
                             val opt = sharedPreference.getString(j.toString(), "#")
 
@@ -308,7 +318,7 @@ class Encuesta : AppCompatActivity(), LocationListener {
                             answer.put("timeAnswered", timeAnswered)
                             answer.put("idRow", 0)
                             answer.put("answer", opt)
-
+                            println("answer")
                             println(answer)
                             answers.put(answer)
 
@@ -364,46 +374,57 @@ class Encuesta : AppCompatActivity(), LocationListener {
                     }
                 }
             queue.add(requestUser)
-
         }
     }
 
 
     private fun saveSelection(count: Int) {
-        //Log.e("SAVESELECTION", ":)")
+        Log.e("SAVESELECTION", ":)")
         val sharedPreference = getSharedPreferences("profile", Context.MODE_PRIVATE)
         if (binding.lRadio4.isVisible) {
             val sId = binding.rg4.checkedRadioButtonId
-            //Log.e("R4", sId.toString())
+            Log.e("R4", sId.toString())
+            Log.e("Count", count.toString())
             val answer = findViewById<RadioButton>(sId).text.toString()
-            sharedPreference.edit().putString(count.toString(), answer).apply()
+            sharedPreference.edit().putString((count + 1).toString(), answer).apply()
             binding.rg4.clearCheck()
         } else if (binding.lRadio5.isVisible) {
             val sId = binding.rg5.checkedRadioButtonId
-            //Log.e("R5", sId.toString())
+            Log.e("R5", sId.toString())
+            Log.e("Count", count.toString())
             val answer = findViewById<RadioButton>(sId).text.toString()
-            sharedPreference.edit().putString(count.toString(), answer).apply()
+            sharedPreference.edit().putString((count + 1).toString(), answer).apply()
             binding.rg4.clearCheck()
 
         } else if (binding.lRadio6.isVisible) {
             val sId = binding.rg6.checkedRadioButtonId
-            //Log.e("R6", sId.toString())
+            Log.e("R6", sId.toString())
+            Log.e("Count", count.toString())
             val answer = findViewById<RadioButton>(sId).text.toString()
-            sharedPreference.edit().putString(count.toString(), answer).apply()
+            sharedPreference.edit().putString((count + 1).toString(), answer).apply()
             binding.rg4.clearCheck()
 
         } else if (binding.lRadio8.isVisible) {
             val sId = binding.rg8.checkedRadioButtonId
-            //Log.e("R8", sId.toString())
+            Log.e("R8", sId.toString())
+            Log.e("Count", count.toString())
             val answer = findViewById<RadioButton>(sId).text.toString()
-            sharedPreference.edit().putString(count.toString(), answer).apply()
+            sharedPreference.edit().putString((count + 1).toString(), answer).apply()
             binding.rg4.clearCheck()
 
         } else if (binding.lTexto.isVisible) {
             val answer = binding.tiedResponse.text.toString()
-            sharedPreference.edit().putString(count.toString(), answer).apply()
-            //Log.e("ANSWER", answer)
+            sharedPreference.edit().putString((count + 1).toString(), answer).apply()
+            Log.e("ANSWER", answer)
+            Log.e("Count", count.toString())
             binding.tiedResponse.text?.clear()
+
+        } else if (binding.lDisease.isVisible) {
+            val answer = binding.tiedDisease.text.toString()
+            sharedPreference.edit().putString((count + 1).toString(), answer).apply()
+            Log.e("ANSWER", answer)
+            Log.e("Count", count.toString())
+            binding.tiedDisease.text?.clear()
         }
     }
 
@@ -419,6 +440,7 @@ class Encuesta : AppCompatActivity(), LocationListener {
         //println(urlOptions)
 
         val listener = Response.Listener<JSONArray> { response ->
+            println("response question options by id")
             println(response)
             for (i in 0 until response.length()) {
                 options.add(
@@ -576,6 +598,7 @@ class Encuesta : AppCompatActivity(), LocationListener {
     }
 
     override fun onLocationChanged(location: Location) {
+        //Toast.makeText(this@Encuesta, location.latitude.toString(), Toast.LENGTH_SHORT).show()
         lat = location.latitude
         lon = location.longitude
     }

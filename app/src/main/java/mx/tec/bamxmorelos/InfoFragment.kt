@@ -71,7 +71,7 @@ class InfoFragment : Fragment(){
         sugerencias.setOnClickListener {
 
             var builder = AlertDialog.Builder(context)
-            builder.setTitle("Recomendaciones")
+            /*builder.setTitle("Recomendaciones")
                 .setMessage("*Llevar una dieta variada y equilibrada\n" +
                         "*Disminuir el consumo de ácidos grasos saturados y preferir el consumo de acidos grasos mono y poliinsaturados\n" +
                         "*Llevar una alimentación que cubra las necesidades de cada integrante de la familia\n" +
@@ -80,7 +80,10 @@ class InfoFragment : Fragment(){
                 .setNegativeButton("Cerrar") { dialog, _ ->
                     dialog.dismiss()
                 }
-                .show()
+                .show()*/
+            val intent = Intent(context, Retroalimentacion::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
         }
 
 

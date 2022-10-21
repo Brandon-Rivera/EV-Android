@@ -1,10 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Retroalimentacion">
 
-  </androidx.constraintlayout.widget.ConstraintLayout>
+  <ImageButton
+      android:id="@+id/iBtnBackReco"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="16dp"
+      android:contentDescription="@string/iBtnRegresar"
+      android:minHeight="48dp"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:srcCompat="@drawable/ic_back" />
+
+  <ScrollView
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      android:layout_marginStart="24dp"
+      android:layout_marginTop="24dp"
+      android:layout_marginEnd="24dp"
+      android:layout_marginBottom="24dp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.5"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/iBtnBackReco">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+      <TextView
+          android:id="@+id/textView28"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="16dp"
+          android:fontFamily="@font/omnesmedium"
+          android:text="@string/btnRecomendacionesInfo"
+          android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+      <TextView
+          android:id="@+id/textView29"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="4dp"
+          android:fontFamily="@font/omnesmedium"
+          android:text="@string/diseaseDiabetes"
+          android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+      <TextView
+          android:id="@+id/textView30"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="12dp"
+          android:fontFamily="@font/omnesmedium"
+          android:text="@string/recDiabetes" />
+
+      <TextView
+          android:id="@+id/textView31"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="4dp"
+          android:fontFamily="@font/omnesmedium"
+          android:text="@string/diseaseHipertension"
+          android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+      <TextView
+          android:id="@+id/textView32"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="12dp"
+          android:fontFamily="@font/omnesmedium"
+          android:text="@string/recHipertension" />
+
+      <TextView
+          android:id="@+id/textView33"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="4dp"
+          android:fontFamily="@font/omnesmedium"
+          android:text="@string/diseaseObesidad"
+          android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+      <TextView
+          android:id="@+id/textView34"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="12dp"
+          android:fontFamily="@font/omnesmedium"
+          android:text="@string/recObesidad" />
+
+      <TextView
+          android:id="@+id/textView35"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="4dp"
+          android:fontFamily="@font/omnesmedium"
+          android:text="@string/recGenerales"
+          android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+      <TextView
+          android:id="@+id/textView36"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="12dp"
+          android:fontFamily="@font/omnesmedium"
+          android:text="@string/recGeneralesLista" />
+
+    </LinearLayout>
+  </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

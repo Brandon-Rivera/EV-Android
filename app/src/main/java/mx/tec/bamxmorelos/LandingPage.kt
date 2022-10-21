@@ -3,6 +3,7 @@ package mx.tec.bamxmorelos
 import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.icu.text.IDNA.Info
 import android.location.Location
 import android.location.LocationListener
@@ -10,6 +11,7 @@ import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -18,11 +20,13 @@ class LandingPage : AppCompatActivity(), LocationListener {
 
     lateinit var locationManager: LocationManager
     lateinit var mapa: GoogleMap
+    var lat = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_landing_page)
         supportActionBar?.hide()
+
 
         this.requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
@@ -33,6 +37,17 @@ class LandingPage : AppCompatActivity(), LocationListener {
         val familyFragment = FamilyFragment()
         replaceFragment(landingFragment)
 
+
+        if (ActivityCompat.checkSelfPermission(this@LandingPage,
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        ) {
+            locationManager.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER,
+                1000,
+                5f,
+                this@LandingPage
+            )
+        }
 
 
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
@@ -49,7 +64,6 @@ class LandingPage : AppCompatActivity(), LocationListener {
         }
 
 
-
     }
     private fun replaceFragment(fragment: Fragment){
         if(fragment != null){
@@ -61,7 +75,7 @@ class LandingPage : AppCompatActivity(), LocationListener {
     }
 
     override fun onLocationChanged(location: Location) {
-        TODO("Not yet implemented")
+        lat = location.latitude
     }
 
 }

@@ -73,7 +73,8 @@
 
         <TableLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:shrinkColumns="*">
 
             <TableRow
                 android:layout_width="match_parent"
@@ -146,13 +147,14 @@
                 android:layout_height="match_parent">
 
                 <CheckBox
-                    android:id="@+id/checkBox7"
-                    android:layout_width="match_parent"
+                    android:id="@+id/cbDiabetesEditar"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
                     android:text="@string/diseaseDiabetes" />
 
                 <CheckBox
-                    android:id="@+id/checkBox8"
+                    android:id="@+id/cbObesidadEditar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/diseaseObesidad" />
@@ -163,9 +165,10 @@
                 android:layout_height="match_parent">
 
                 <CheckBox
-                    android:id="@+id/checkBox9"
+                    android:id="@+id/cbHipertensionEditar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
                     android:text="@string/diseaseHipertension" />
             </TableRow>
 
@@ -176,13 +179,15 @@
                 <Button
                     android:id="@+id/btnConfirmarEditar"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="10dp"
                     android:text="@string/btnConfirmarEdit" />
 
                 <Button
                     android:id="@+id/btnEliminarEditar"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
                     android:layout_weight="1"
                     android:text="@string/btnEliminarEditar" />
             </TableRow>
