@@ -238,7 +238,7 @@ class Editar : AppCompatActivity() {
         }
 
         binding.btnConfirmarEditar.setOnClickListener{
-            /*
+
             LoadingDialog.display(this@Editar)
             val body = JSONObject()
             val diseases = JSONArray()
@@ -293,8 +293,10 @@ class Editar : AppCompatActivity() {
             }
             queue.add(request)
 
-            */
 
+
+
+            /*
             LoadingDialog.display(this@Editar)
             val body = JSONObject()
             val isPregnant = binding.cbPregnantEditar.isChecked.compareTo(false)
@@ -427,7 +429,7 @@ class Editar : AppCompatActivity() {
                     return hashMap
                 }
             }
-            queue.add(request)
+            queue.add(request)*/
         }
 
         binding.spSexoEditar.onItemSelectedListener
