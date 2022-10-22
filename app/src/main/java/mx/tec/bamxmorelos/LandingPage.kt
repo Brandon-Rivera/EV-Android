@@ -94,7 +94,10 @@ class LandingPage : AppCompatActivity(), LocationListener {
         }
 
         val error = Response.ErrorListener { error ->
-            Log.e("ERROR", error.message!!)
+            //Log.e("ERROR", error.message!!)
+            if(error != null) {
+                Log.e("ERROR", error.message!!)
+            }
         }
 
 

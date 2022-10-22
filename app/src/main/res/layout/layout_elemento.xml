@@ -18,26 +18,39 @@
         app:cardCornerRadius="12dp"
         app:contentPadding="10dp">
 
-        <LinearLayout
-            android:id="@+id/llCardElemento"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_height="match_parent">
 
             <ImageView
                 android:id="@+id/imgImagen"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
                 android:contentDescription="@string/cDescriptionElemento"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:srcCompat="@tools:sample/avatars" />
 
+            <ImageButton
+                android:id="@+id/iBtnEditarMiembro"
+                android:layout_width="wrap_content"
+                android:layout_height="75dp"
+                android:contentDescription="@string/btnEditarMiembro"
+                android:minHeight="48dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_edit_mode" />
+
             <LinearLayout
-                android:id="@+id/vllCardElemento"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="end|center_vertical"
-                android:orientation="vertical">
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/iBtnEditarMiembro"
+                app:layout_constraintStart_toEndOf="@+id/imgImagen"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
                     android:id="@+id/txtNombreElemento"
@@ -75,18 +88,8 @@
 
                 </LinearLayout>
 
-                <ImageButton
-                    android:id="@+id/iBtnEditarMiembro"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:minHeight="48dp"
-                    android:contentDescription="@string/btnEditarMiembro"
-                    app:srcCompat="@drawable/ic_edit_mode" />
-
             </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </LinearLayout>
     </androidx.cardview.widget.CardView>
 </LinearLayout>

@@ -71,7 +71,10 @@ class Encuesta : AppCompatActivity(), LocationListener {
         }
 
         val error = Response.ErrorListener { error ->
-            Log.e("RequestError", error.toString()!!)
+            //Log.e("RequestError", error.toString()!!)
+            if(error != null) {
+                Log.e("ERROR", error.message!!)
+            }
         }
 
         val request =
@@ -116,7 +119,10 @@ class Encuesta : AppCompatActivity(), LocationListener {
         }
 
         val errorFam = Response.ErrorListener { errorFam ->
-            Log.e("ERRORFam", errorFam.message!!)
+            //Log.e("ERRORFam", errorFam.message!!)
+            if(error != null) {
+                Log.e("ERRORFam", errorFam.message!!)
+            }
         }
 
 
@@ -179,7 +185,10 @@ class Encuesta : AppCompatActivity(), LocationListener {
                 }
 
                 val errorUbi = Response.ErrorListener { error ->
-                    Log.e("ERROR", error.message!!)
+                    //Log.e("ERROR", error.message!!)
+                    if(error != null) {
+                        Log.e("ERRORUbi", error.message!!)
+                    }
 
                     Toast.makeText(this@Encuesta, "Ubicacion no registrada",
                         Toast.LENGTH_SHORT).show()
@@ -223,7 +232,7 @@ class Encuesta : AppCompatActivity(), LocationListener {
                 count += 1
 
                 //verificar si es fin de encuesta para submit
-                if (count + 1 == 34) { // <-- regresar a res.length()
+                if (count + 1 == res.length()) { // <-- regresar a res.length()
                     binding.btnSiguiente.visibility = INVISIBLE
                     binding.btnSubmit.visibility = VISIBLE
                 } else {
@@ -283,7 +292,10 @@ class Encuesta : AppCompatActivity(), LocationListener {
             }
 
             val errorSubmit = Response.ErrorListener { error ->
-                Log.e("ERRORSubmit", error.message!!.toString())
+                //Log.e("ERRORSubmit", error.message!!.toString())
+                if(error != null) {
+                    Log.e("ERRORSubmit", error.message!!)
+                }
                 val mySnackbar = Snackbar.make(
                     findViewById(mx.tec.bamxmorelos.R.id.clEncuesta),
                     "Envío fallido",
@@ -352,7 +364,10 @@ class Encuesta : AppCompatActivity(), LocationListener {
             }
 
             val errorUser = Response.ErrorListener { error ->
-                Log.e("ERRORUser", error.message!!)
+                //Log.e("ERRORUser", error.message!!)
+                if(error != null) {
+                    Log.e("ERRORUser", error.message!!)
+                }
 
             }
 
@@ -438,7 +453,7 @@ class Encuesta : AppCompatActivity(), LocationListener {
         val urlOptions =
             "http://api-vacaciones.us-east-1.elasticbeanstalk.com/api/questionsoptionsByQuesId/$idQ"
         //println(urlOptions)
-
+        options.clear()
         val listener = Response.Listener<JSONArray> { response ->
             println("response question options by id")
             println(response)
@@ -447,12 +462,16 @@ class Encuesta : AppCompatActivity(), LocationListener {
                     response.getJSONObject(i).getString("optionName")
                 )
             }
+
             fillOptions(options)
 
         }
 
         val error = Response.ErrorListener { error ->
-            Log.e("RequestError", error.toString()!!)
+            //Log.e("RequestError", error.toString()!!)
+            if(error != null) {
+                Log.e("ERRORRequest", error.message!!)
+            }
         }
 
         val requestOptions =

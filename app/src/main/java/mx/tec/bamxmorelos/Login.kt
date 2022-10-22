@@ -95,7 +95,10 @@ class Login : AppCompatActivity() {
                     }
                 }
                 val error = Response.ErrorListener { error ->
-                    Log.e("ERROR", error.message!!)
+                    //Log.e("ERROR", error.message!!)
+                    if(error != null) {
+                        Log.e("ERROR", error.message!!)
+                    }
                     Toast.makeText(
                         this@Login, error.message,
                         Toast.LENGTH_SHORT

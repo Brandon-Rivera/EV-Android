@@ -83,7 +83,10 @@ class Editar : AppCompatActivity() {
         }
 
         val errorDiseaseM = Response.ErrorListener { error ->
-            Log.e("ERROR", error.message!!)
+            //Log.e("ERROR", error.message!!)
+            if(error != null) {
+                Log.e("ERROR", error.message!!)
+            }
         }
 
 
@@ -132,7 +135,10 @@ class Editar : AppCompatActivity() {
         }
 
         val error = Response.ErrorListener { error ->
-            Log.e("ERROR", error.message!!)
+            //Log.e("ERROR", error.message!!)
+            if(error != null) {
+                Log.e("ERROR", error.message!!)
+            }
         }
 
         val request =
@@ -214,7 +220,10 @@ class Editar : AppCompatActivity() {
                     }
 
                     val error = Response.ErrorListener { error ->
-                        Log.e("ERROR", error.message!!)
+                        //Log.e("ERROR", error.message!!)
+                        if(error != null) {
+                            Log.e("ERROR", error.message!!)
+                        }
 
                         //Toast.makeText(this@Agregar, "No se agregó", Toast.LENGTH_SHORT).show()
                         val mySnackbar = Snackbar.make(
@@ -274,7 +283,10 @@ class Editar : AppCompatActivity() {
             }
 
             val error = Response.ErrorListener { error ->
-                Log.e("ERROR", error.message!!)
+                //Log.e("ERROR", error.message!!)
+                if(error != null) {
+                    Log.e("ERROR", error.message!!)
+                }
 
                 //Toast.makeText(this@Agregar, "No se agregó", Toast.LENGTH_SHORT).show()
                 val mySnackbar = Snackbar.make(

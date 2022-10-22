@@ -81,7 +81,10 @@ class Registro : AppCompatActivity() {
                 }
 
                 val error = Response.ErrorListener { error ->
-                    Log.e("ERROR", error.message!!)
+                    //Log.e("ERROR", error.message!!)
+                    if(error != null) {
+                        Log.e("ERROR", error.message!!)
+                    }
                     Toast.makeText(this@Registro, "Failed", Toast.LENGTH_SHORT).show()
                 }
 

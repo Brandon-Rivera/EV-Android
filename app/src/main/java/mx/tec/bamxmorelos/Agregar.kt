@@ -99,7 +99,10 @@ class Agregar : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             }
 
             val errorDisease = Response.ErrorListener { error ->
-                Log.e("ERRORDisease", error.message!!)
+                //Log.e("ERRORDisease", error.message!!)
+                if(error != null) {
+                    Log.e("ERROR", error.message!!)
+                }
                 LoadingDialog.dismiss()
                 //Toast.makeText(this@Agregar, "No se agregó", Toast.LENGTH_SHORT).show()
                 val mySnackbar = Snackbar.make(
@@ -148,7 +151,10 @@ class Agregar : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             }
 
             val errorUser = Response.ErrorListener { error ->
-                Log.e("ERROR", error.message!!)
+                //Log.e("ERROR", error.message!!)
+                if(error != null) {
+                    Log.e("ERROR", error.message!!)
+                }
             }
 
 
@@ -172,7 +178,10 @@ class Agregar : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             }
 
             val error = Response.ErrorListener { error ->
-                Log.e("ERROR", error.message!!)
+                //Log.e("ERROR", error.message!!)
+                if(error != null) {
+                    Log.e("ERROR", error.message!!)
+                }
             }
 
             val request = object: JsonObjectRequest(Method.POST, url, body, listener, error){

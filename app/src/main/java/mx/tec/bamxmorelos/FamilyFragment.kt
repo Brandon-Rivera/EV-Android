@@ -62,7 +62,7 @@ class FamilyFragment : Fragment(R.layout.fragment_family){
                         response.getJSONObject(i).getString("names") + " " +
                                 response.getJSONObject(i).getString("lastNameD"),
                                 age,
-                        R.mipmap.ic_launcher_logo_round
+                        R.mipmap.ic_launcher_round
                     )
                 )
                 }
@@ -79,7 +79,9 @@ class FamilyFragment : Fragment(R.layout.fragment_family){
         }
 
         val error = Response.ErrorListener { error ->
-            Log.e("ERROR", error.message!!)
+            if(error != null) {
+                Log.e("ERROR", error.message!!)
+            }
         }
 
 
